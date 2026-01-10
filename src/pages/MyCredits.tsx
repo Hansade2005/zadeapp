@@ -3,9 +3,14 @@ import { DollarSign, TrendingUp, CreditCard, Plus, History, Zap, Package, Briefc
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-toastify';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
+import CreditPaymentForm from '../components/CreditPaymentForm';
+
+const stripePromise = loadStripe('pk_live_51SX9vD3dj2RERxFr1rm2CXfovXAzlkOx9aL2ciRo94bmSbRkKQo4lRiI8Y2MpC2CetMexpolKnZFcRDPZyY5uPIT00QmTRViwP');
 
 interface CreditTransaction {
   id: string;
@@ -32,6 +37,8 @@ const MyCredits: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  const [clientSecret, setClientSecret] = useState<string>('');
+  const [showPayment, setShowPayment] = useState(false);
 
   const creditPackages = [
     { credits: 10, price: 1000, popular: false },
@@ -91,13 +98,46 @@ const MyCredits: React.FC = () => {
     }
   };
 
-  const purchaseCredits = async (credits: number, price: number) => {
+  const initiateCreditPurchase = async (credits: number, price: number) => {
     if (!user) {
       toast.error('Please login to purchase credits');
       return;
     }
 
     setPurchasing(true);
+    try {
+      // Create payment intent via edge function
+      const { data, error } = await supabase.functions.invoke('create-payment-intent', {
+        body: {
+          items: [{
+            id: `credit-package-${credits}`,
+            name: `${credits} Credits Package`,
+            price: price,
+            quantity: 1,
+            productId: `credits-${credits}`,
+            credits: credits // Include credits in the item
+          }],
+          total: price,
+          type: 'credit_purchase',
+          credits: credits
+        },
+      });
+
+      if (error) throw error;
+      
+      setClientSecret(data.clientSecret);
+      setShowPayment(true);
+    } catch (error: any) {
+      console.error('Error creating payment intent:', error);
+      toast.error('Failed to initialize payment. Please try again.');
+    } finally {
+      setPurchasing(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (credits: number, price: number) => {
+    if (!user) return;
+    
     try {
       // Get current credits
       const { data: userData } = await supabase
@@ -128,22 +168,14 @@ const MyCredits: React.FC = () => {
 
       if (txError) throw txError;
 
-      // Record order (optional - for revenue tracking)
-      await supabase.from('orders').insert({
-        user_id: user.id,
-        total: price,
-        status: 'completed',
-        order_type: 'credit_purchase',
-      });
-
       toast.success(`Successfully purchased ${credits} credits!`);
       setSelectedPackage(null);
+      setShowPayment(false);
+      setClientSecret('');
       fetchCreditData();
     } catch (error: any) {
-      console.error('Error purchasing credits:', error);
-      toast.error('Failed to purchase credits. Please try again.');
-    } finally {
-      setPurchasing(false);
+      console.error('Error updating credits:', error);
+      toast.error('Payment succeeded but failed to update credits. Please contact support.');
     }
   };
 
@@ -261,7 +293,7 @@ const MyCredits: React.FC = () => {
                   </div>
                   <button
                     onClick={() =>
-                      purchaseCredits(
+                      initiateCreditPurchase(
                         creditPackages[selectedPackage].credits,
                         creditPackages[selectedPackage].price
                       )
@@ -272,12 +304,12 @@ const MyCredits: React.FC = () => {
                     {purchasing ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Processing...
+                        Preparing Payment...
                       </>
                     ) : (
                       <>
                         <Plus className="h-4 w-4" />
-                        Purchase Now
+                        Purchase with Card
                       </>
                     )}
                   </button>
@@ -389,6 +421,22 @@ const MyCredits: React.FC = () => {
 
       <Footer />
       <MobileBottomNav />
+
+      {/* Stripe Payment Modal */}
+      {showPayment && clientSecret && selectedPackage !== null && (
+        <Elements options={{ clientSecret, appearance: { theme: 'stripe' as const } }} stripe={stripePromise}>
+          <CreditPaymentForm
+            credits={creditPackages[selectedPackage].credits}
+            price={creditPackages[selectedPackage].price}
+            onSuccess={(credits, price) => handlePaymentSuccess(credits, price)}
+            onCancel={() => {
+              setShowPayment(false);
+              setClientSecret('');
+              setSelectedPackage(null);
+            }}
+          />
+        </Elements>
+      )}
     </div>
   );
 };
