@@ -1,0 +1,87 @@
+ZadeApp
+Multivendor market place; sale of products and services, including job search and immediate hire for applicants
+
+Section A:
+Online market / product sales
+
+List product categories
+Search locator for item search
+
+   ⁃    sellers contact (include business number, email), business location, addresses,
+   ⁃    Profile picture of sale items; include item description, prices and available discounts
+   ⁃    Shopping cart/ ordering sales
+   ⁃    Arrange sale items for easy reference
+   ⁃    Search locator for users to search out items they want to buy on the site
+   ⁃    GPS to locate nearby shops
+   ⁃     Chat box for instant messaging
+   ⁃    Marketers can boost their online visibility based any approved credit system or subscription
+   ⁃    
+    SECTION B
+Job search/hire for qualified applicants.
+
+Employers advertise open positions, while accepting applications from qualified employees.
+
+Job categories:
+-formal certified jobs
+-menial jobs ( home/office plumber, house cleaner) users can log in to advertise contract or daily jobs.
+Required for menial jobs; special job description and location,
+
+
+Required for formal job employers.
+Employer contact
+-Office address
+-Number
+-Website,  and clear job description that matches with site expectations of credible
+
+Anyone can view advertised postings but only active account holders can apply for positions.
+Active account holders are people who sign up on the site with their useful information and correct identification.
+
+Employers can boost their visibility on the site by a credit system which will be purchased by them.
+
+Payment system integration
+PayPal and bank information integration
+
+
+Section C Entertainment
+
+Events stars; Artiste, Deejay, instrumentalists.
+
+Event host advertises upcoming event, eg wedding, birthday or street party while artistes and performers apply for positions,
+Including party Deejay, band groups, instrumentalist eg pianist, guitar player
+Ushers or any event organizers
+
+Artistes get hired on the site based on artiste credential profiling;
+eg Artist videos,
+Podcasts
+Gallery of pictures
+artist Biography
+Jobs completed and site ratings,
+Include links to artist website or social media
+
+Artiste categories
+Musicians and band
+Deejay
+Models
+Ushers and event staff, event organizers
+Venue managers
+Decoration staff
+Lights and stage; mechanics and equipment hire
+
+Freelance section
+
+   ⁃    Hire online bloggers,
+   ⁃    Social media managers,
+   ⁃    Creative artists including graphic designers, photo editors, video editors
+   ⁃    Online tutors
+
+     About information of artiste and models
+
+   ⁃    Artiste video
+   ⁃    Audio
+   ⁃    Artist social media link
+
+   ⁃    Chat box for artist-client communication
+
+Registered host can advertise events
+Only registered/active account users can apply for event openings such as hiring a deejay.
+Any online user can view advertised postings but only active account owners can apply to them.
