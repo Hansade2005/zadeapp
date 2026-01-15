@@ -29,7 +29,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
 }) => {
   const navigate = useNavigate();
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal > 50000 ? 0 : 2500; // Free shipping over $50,000
+  const shipping = subtotal > 200 ? 0 : 2; // Free shipping over $50,000
   const total = subtotal + shipping;
 
   return (
