@@ -205,7 +205,7 @@ const Messages: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, full_name, email, user_type, location')
+        .select('id, full_name, email, user_type, location, created_at')
         .neq('id', currentUser?.id) // Exclude current user
         .or(`full_name.ilike.%${query}%,email.ilike.%${query}%`)
         .limit(10);

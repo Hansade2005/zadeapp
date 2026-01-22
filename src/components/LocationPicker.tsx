@@ -73,7 +73,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
   );
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [isGettingLocation, setIsGettingLocation] = useState(false);
-  const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const searchTimeoutRef = useRef<number | undefined>(undefined);
 
   // Debounced search
   useEffect(() => {
@@ -85,10 +85,31 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
     clearTimeout(searchTimeoutRef.current);
     searchTimeoutRef.current = setTimeout(async () => {
       setIsSearching(true);
-      const results = await searchLocation(searchQuery);
-      setSearchResults(results);
-      setIsSearching(false);
-      setShowResults(true);
+      try {
+        const results = await searchLocation(searchQuery);
+        setSearchResults(results);
+        setShowResults(true);
+      } catch (error) {
+        console.error('Search failed:', error);
+        // Fallback to city matches if search fails
+        const lowerQuery = searchQuery.toLowerCase();
+        const cityMatches = nigerianCities.filter(city =>
+          city.name.toLowerCase().includes(lowerQuery) ||
+          city.state.toLowerCase().includes(lowerQuery)
+        ).slice(0, 3);
+
+        setSearchResults(cityMatches.map(city => ({
+          latitude: city.latitude,
+          longitude: city.longitude,
+          display_name: `${city.name}, ${city.state}`,
+          city: city.name,
+          state: city.state,
+          country: 'Canada',
+        })));
+        setShowResults(true);
+      } finally {
+        setIsSearching(false);
+      }
     }, 500);
 
     return () => clearTimeout(searchTimeoutRef.current);
@@ -114,19 +135,35 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
     const newPosition = new LatLng(lat, lng);
     setPosition(newPosition);
 
-    // Reverse geocode to get location name
-    const { reverseGeocode } = await import('../lib/locationUtils');
-    const locationInfo = await reverseGeocode(lat, lng);
+    try {
+      // Reverse geocode to get location name
+      const { reverseGeocode } = await import('../lib/locationUtils');
+      const locationInfo = await reverseGeocode(lat, lng);
 
-    setSelectedLocation(locationInfo.location_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+      setSelectedLocation(locationInfo.location_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
 
-    onLocationSelect({
-      latitude: lat,
-      longitude: lng,
-      location_name: locationInfo.location_name || '',
-      city: locationInfo.city,
-      state: locationInfo.state,
-    });
+      onLocationSelect({
+        latitude: lat,
+        longitude: lng,
+        location_name: locationInfo.location_name || '',
+        city: locationInfo.city,
+        state: locationInfo.state,
+      });
+    } catch (error) {
+      console.warn('Map click geocoding failed:', error);
+
+      // Fallback to coordinates
+      const coords = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      setSelectedLocation(coords);
+
+      onLocationSelect({
+        latitude: lat,
+        longitude: lng,
+        location_name: coords,
+        city: undefined,
+        state: undefined,
+      });
+    }
   };
 
   const handleGetCurrentLocation = async () => {
