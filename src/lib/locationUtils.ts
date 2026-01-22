@@ -63,23 +63,86 @@ export async function getCurrentLocation(): Promise<Location | null> {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
-        // Reverse geocode to get location name
-        const locationName = await reverseGeocode(latitude, longitude);
-        
-        resolve({
-          latitude,
-          longitude,
-          ...locationName,
-        });
+
+        try {
+          // Reverse geocode to get location name with improved error handling
+          const locationName = await reverseGeocode(latitude, longitude);
+
+          resolve({
+            latitude,
+            longitude,
+            ...locationName,
+          });
+        } catch (error) {
+          console.warn('Reverse geocoding failed, using coordinates only:', error);
+
+          // Still return location even if geocoding fails
+          resolve({
+            latitude,
+            longitude,
+            location_name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+            country: 'Canada',
+          });
+        }
       },
       (error) => {
         console.error('Error getting location:', error);
+
+        // Provide user-friendly error messages
+        let errorMessage = 'Unable to get location';
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Location permission denied. Please enable location access.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Location information unavailable.';
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Location request timed out.';
+            break;
+        }
+
+        console.error(errorMessage);
         resolve(null);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 } // Increased timeout and cache
     );
   });
+}
+
+/**
+ * Cache for geocoding results to reduce API calls
+ */
+const geocodingCache = new Map<string, any>();
+const CACHE_DURATION = 1000 * 60 * 60; // 1 hour
+
+/**
+ * Sleep function for retry delays
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Retry function with exponential backoff
+ */
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+
+      const delay = baseDelay * Math.pow(2, i) + Math.random() * 1000; // Add jitter
+      console.warn(`Attempt ${i + 1} failed, retrying in ${delay}ms...`);
+      await sleep(delay);
+    }
+  }
+  throw new Error('Max retries exceeded');
 }
 
 /**
@@ -89,30 +152,60 @@ export async function reverseGeocode(
   lat: number,
   lon: number
 ): Promise<{ location_name?: string; city?: string; state?: string; country?: string }> {
+  const cacheKey = `reverse_${lat.toFixed(4)}_${lon.toFixed(4)}`;
+  const cached = geocodingCache.get(cacheKey);
+
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`,
-      {
-        headers: {
-          'User-Agent': 'ZadeApp/1.0',
-        },
+    const result = await retryWithBackoff(async () => {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`,
+        {
+          headers: {
+            'User-Agent': 'ZadeApp/1.0 (contact@zadeapp.com)',
+          },
+        }
+      );
+
+      if (response.status === 403) {
+        throw new Error('Rate limited - please try again later');
       }
-    );
 
-    if (!response.ok) throw new Error('Geocoding failed');
+      if (!response.ok) {
+        throw new Error(`Geocoding failed with status ${response.status}`);
+      }
 
-    const data = await response.json();
-    const address = data.address || {};
+      const data = await response.json();
+      const address = data.address || {};
 
-    return {
-      location_name: data.display_name,
-      city: address.city || address.town || address.village || address.suburb,
-      state: address.state,
-      country: address.country || 'Canada',
-    };
+      return {
+        location_name: data.display_name,
+        city: address.city || address.town || address.village || address.suburb,
+        state: address.state,
+        country: address.country || 'Canada',
+      };
+    });
+
+    // Cache the result
+    geocodingCache.set(cacheKey, {
+      data: result,
+      timestamp: Date.now()
+    });
+
+    return result;
   } catch (error) {
     console.error('Reverse geocoding error:', error);
-    return {};
+
+    // Return basic location info as fallback
+    return {
+      location_name: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+      city: undefined,
+      state: undefined,
+      country: 'Canada',
+    };
   }
 }
 
@@ -122,34 +215,73 @@ export async function reverseGeocode(
 export async function searchLocation(
   query: string
 ): Promise<Array<Location & { display_name: string }>> {
+  const cacheKey = `search_${query.toLowerCase().trim()}`;
+  const cached = geocodingCache.get(cacheKey);
+
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.data;
+  }
+
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-        query
-      )}&countrycodes=ca&addressdetails=1&limit=5`,
-      {
-        headers: {
-          'User-Agent': 'ZadeApp/1.0',
-        },
+    const result = await retryWithBackoff(async () => {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&countrycodes=ca&addressdetails=1&limit=5`,
+        {
+          headers: {
+            'User-Agent': 'ZadeApp/1.0 (contact@zadeapp.com)',
+          },
+        }
+      );
+
+      if (response.status === 403) {
+        throw new Error('Rate limited - please try again later');
       }
-    );
 
-    if (!response.ok) throw new Error('Search failed');
+      if (!response.ok) {
+        throw new Error(`Search failed with status ${response.status}`);
+      }
 
-    const data = await response.json();
+      const data = await response.json();
 
-    return data.map((item: any) => ({
-      latitude: parseFloat(item.lat),
-      longitude: parseFloat(item.lon),
-      location_name: item.display_name,
-      display_name: item.display_name,
-      city: item.address?.city || item.address?.town || item.address?.village,
-      state: item.address?.state,
-      country: item.address?.country || 'Canada',
-    }));
+      return data.map((item: any) => ({
+        latitude: parseFloat(item.lat),
+        longitude: parseFloat(item.lon),
+        location_name: item.display_name,
+        display_name: item.display_name,
+        city: item.address?.city || item.address?.town || item.address?.village,
+        state: item.address?.state,
+        country: item.address?.country || 'Canada',
+      }));
+    });
+
+    // Cache the result
+    geocodingCache.set(cacheKey, {
+      data: result,
+      timestamp: Date.now()
+    });
+
+    return result;
   } catch (error) {
     console.error('Location search error:', error);
-    return [];
+
+    // Try to match with predefined cities as fallback
+    const lowerQuery = query.toLowerCase();
+    const cityMatches = nigerianCities.filter(city =>
+      city.name.toLowerCase().includes(lowerQuery) ||
+      city.state.toLowerCase().includes(lowerQuery)
+    ).slice(0, 3);
+
+    return cityMatches.map(city => ({
+      latitude: city.latitude,
+      longitude: city.longitude,
+      location_name: `${city.name}, ${city.state}`,
+      display_name: `${city.name}, ${city.state}`,
+      city: city.name,
+      state: city.state,
+      country: 'Canada',
+    }));
   }
 }
 
