@@ -59,7 +59,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
           quantity: item.quantity,
           unit_price: item.price,
           total_price: item.price * item.quantity,
-          delivery_fee: total > 50000 ? 0 : 2500, // Free shipping over $50,000
+          delivery_fee: 0, // No delivery cost
           delivery_address: shippingAddress,
           status: 'pending',
           payment_status: 'processing'

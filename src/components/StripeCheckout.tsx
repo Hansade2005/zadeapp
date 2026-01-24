@@ -35,7 +35,7 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
 
   // Calculate totals
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal > 50000 ? 0 : 2500; // Free shipping over $50,000
+  const shipping = 0; // No delivery cost
   const total = subtotal + shipping;
 
   // Create payment intent when component mounts
