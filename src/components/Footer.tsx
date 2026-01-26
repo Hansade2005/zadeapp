@@ -11,36 +11,36 @@ const Footer: React.FC = () => {
       title: 'Marketplace',
       links: [
         { name: 'Browse Products', href: '/marketplace' },
-        { name: 'Sell on ZadeApp', href: '/sell' },
-        { name: 'Vendor Guidelines', href: '/vendor-guidelines' },
-        { name: 'Product Categories', href: '/categories' }
+        { name: 'My Products', href: '/my-products' },
+        { name: 'My Orders', href: '/my-orders' },
+        { name: 'Wishlist', href: '/wishlist' }
       ]
     },
     {
       title: 'Services',
       links: [
         { name: 'Find Jobs', href: '/jobs' },
-        { name: 'Post a Job', href: '/post-job' },
+        { name: 'My Jobs', href: '/my-jobs' },
         { name: 'Freelancers', href: '/freelance' },
         { name: 'Events', href: '/events' }
       ]
     },
     {
-      title: 'Support',
+      title: 'Entertainment',
       links: [
-        { name: 'Help Center', href: '/help' },
-        { name: 'Contact Us', href: '/contact' },
-        { name: 'Shipping Info', href: '/shipping' },
-        { name: 'Returns', href: '/returns' }
+        { name: 'Artists', href: '/artistes' },
+        { name: 'My Events', href: '/my-events' },
+        { name: 'Artist Profile', href: '/artiste-profile' },
+        { name: 'Messages', href: '/messages' }
       ]
     },
     {
-      title: 'Company',
+      title: 'Account',
       links: [
-        { name: 'About Us', href: '/about' },
-        { name: 'Careers', href: '/careers' },
-        { name: 'Press', href: '/press' },
-        { name: 'Blog', href: '/blog' }
+        { name: 'Profile', href: '/profile' },
+        { name: 'Settings', href: '/settings' },
+        { name: 'My Credits', href: '/my-credits' },
+        { name: 'Notifications', href: '/notifications' }
       ]
     }
   ];
@@ -67,23 +67,23 @@ const Footer: React.FC = () => {
               />
             </Link>
             <p className="text-gray-400 mb-6 max-w-md">
-              Nigeria's premier multi-marketplace platform connecting buyers, sellers, job seekers, 
+              Canada's premier multi-marketplace platform connecting buyers, sellers, job seekers,
               freelancers, and event organizers across the country.
             </p>
-            
+
             {/* Contact Info */}
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center space-x-2">
                 <MapPin className="w-4 h-4" />
-                <span>Lagos, Nigeria</span>
+                <span>Toronto, Canada</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
-                <span>+234 800 ZADE APP</span>
+                <span>+1 (800) ZADE-APP</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
-                <span>hello@zadeapp.ng</span>
+                <span>hello@zadeapp.ca</span>
               </div>
             </div>
           </div>
@@ -131,15 +131,15 @@ const Footer: React.FC = () => {
         {/* Bottom Footer */}
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between">
           <div className="flex flex-wrap items-center space-x-6 mb-4 md:mb-0">
-            <Link to="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
+            <span className="text-gray-400 text-sm">
               Privacy Policy
-            </Link>
-            <Link to="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
+            </span>
+            <span className="text-gray-400 text-sm">
               Terms of Service
-            </Link>
-            <Link to="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">
+            </span>
+            <span className="text-gray-400 text-sm">
               Cookie Policy
-            </Link>
+            </span>
           </div>
 
           {/* Social Links */}
@@ -162,7 +162,7 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="text-center mt-8 pt-8 border-t border-gray-800">
           <p className="text-gray-400 text-sm">
-            © {currentYear} ZadeApp. All rights reserved. Made with <Heart className="inline w-4 h-4 text-red-500 mx-1" /> in Nigeria.
+            © {currentYear} ZadeApp. All rights reserved. Made with <Heart className="inline w-4 h-4 text-red-500 mx-1" /> in Canada.
           </p>
         </div>
       </div>
