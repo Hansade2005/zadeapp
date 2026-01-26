@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import StripeCheckout from '../components/StripeCheckout';
-import { ArrowLeft, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, AlertTriangle, Trash2 } from 'lucide-react';
 
 interface CartItem {
   id: string;
@@ -24,6 +24,10 @@ const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasInvalidItems, setHasInvalidItems] = useState(false);
+
+  // UUID validation regex
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
   useEffect(() => {
     if (!user) {
@@ -31,12 +35,20 @@ const Checkout: React.FC = () => {
       return;
     }
 
-    // Load cart items from localStorage (in a real app, this would be from a cart context or API)
+    // Load cart items from localStorage
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
         const parsedCart = JSON.parse(savedCart);
         setCartItems(parsedCart);
+
+        // Check for invalid items
+        const invalid = parsedCart.some((item: any) => {
+          const sellerId = item.sellerId || item.seller_id || '';
+          const productId = item.productId || item.id || '';
+          return !sellerId || !productId || !uuidRegex.test(sellerId) || !uuidRegex.test(productId);
+        });
+        setHasInvalidItems(invalid);
       } catch (error) {
         console.error('Error parsing cart:', error);
       }
@@ -44,6 +56,12 @@ const Checkout: React.FC = () => {
 
     setLoading(false);
   }, [user, navigate]);
+
+  const handleClearCart = () => {
+    localStorage.removeItem('cart');
+    setCartItems([]);
+    setHasInvalidItems(false);
+  };
 
   const handleOrderSuccess = (orderId: string) => {
     // Clear cart
@@ -116,6 +134,29 @@ const Checkout: React.FC = () => {
             <p className="text-gray-600 mt-1">Complete your order</p>
           </div>
 
+          {/* Invalid Cart Warning */}
+          {hasInvalidItems && (
+            <div className="mb-8 bg-red-50 border border-red-200 rounded-lg p-6">
+              <div className="flex items-start gap-4">
+                <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-red-800 mb-2">Cart Contains Invalid Items</h3>
+                  <p className="text-red-700 text-sm mb-4">
+                    Some items in your cart have outdated data and cannot be processed.
+                    Please clear your cart and add products again from the product pages.
+                  </p>
+                  <button
+                    onClick={handleClearCart}
+                    className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Clear Cart & Start Fresh
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Order Summary */}
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -164,11 +205,19 @@ const Checkout: React.FC = () => {
 
             {/* Payment Form */}
             <div>
-              <StripeCheckout
-                cartItems={cartItems}
-                onSuccess={handleOrderSuccess}
-                onCancel={handleCancel}
-              />
+              {hasInvalidItems ? (
+                <div className="bg-gray-100 rounded-lg p-6 text-center">
+                  <p className="text-gray-600">
+                    Please clear your cart and re-add products to proceed with checkout.
+                  </p>
+                </div>
+              ) : (
+                <StripeCheckout
+                  cartItems={cartItems}
+                  onSuccess={handleOrderSuccess}
+                  onCancel={handleCancel}
+                />
+              )}
             </div>
           </div>
         </div>
