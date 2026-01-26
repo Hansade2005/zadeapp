@@ -15,10 +15,11 @@ interface Registration {
   id: string;
   event_id: string;
   user_id: string;
-  ticket_quantity: number;
-  total_amount: number;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'attended';
-  payment_status: 'pending' | 'paid' | 'refunded';
+  ticket_type: string;
+  quantity: number;
+  total_price: number;
+  status: string | null;
+  payment_status: 'pending' | 'paid' | 'refunded' | 'failed';
   created_at: string;
   event?: {
     id: string;
@@ -112,10 +113,11 @@ const MyRegistrations: React.FC = () => {
   };
 
   const filteredRegistrations = registrations.filter(reg => {
+    const status = reg.status || 'pending';
     if (filter === 'all') return true;
-    if (filter === 'upcoming') return reg.event && isUpcoming(reg.event.start_date) && reg.status !== 'cancelled';
+    if (filter === 'upcoming') return reg.event && isUpcoming(reg.event.start_date) && status !== 'cancelled';
     if (filter === 'past') return reg.event && !isUpcoming(reg.event.start_date);
-    if (filter === 'cancelled') return reg.status === 'cancelled';
+    if (filter === 'cancelled') return status === 'cancelled';
     return true;
   });
 
@@ -196,9 +198,9 @@ const MyRegistrations: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             {[
               { label: 'Total', value: registrations.length, color: 'bg-gray-100' },
-              { label: 'Upcoming', value: registrations.filter(r => r.event && isUpcoming(r.event.start_date) && r.status !== 'cancelled').length, color: 'bg-purple-100' },
-              { label: 'Attended', value: registrations.filter(r => r.status === 'attended').length, color: 'bg-green-100' },
-              { label: 'Cancelled', value: registrations.filter(r => r.status === 'cancelled').length, color: 'bg-red-100' },
+              { label: 'Upcoming', value: registrations.filter(r => r.event && isUpcoming(r.event.start_date) && (r.status || 'pending') !== 'cancelled').length, color: 'bg-purple-100' },
+              { label: 'Paid', value: registrations.filter(r => r.payment_status === 'paid').length, color: 'bg-green-100' },
+              { label: 'Cancelled', value: registrations.filter(r => (r.status || 'pending') === 'cancelled').length, color: 'bg-red-100' },
             ].map((stat) => (
               <div key={stat.label} className={`${stat.color} rounded-lg p-4 text-center`}>
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
@@ -273,13 +275,13 @@ const MyRegistrations: React.FC = () => {
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            {registration.event && isUpcoming(registration.event.start_date) && registration.status !== 'cancelled' && (
+                            {registration.event && isUpcoming(registration.event.start_date) && (registration.status || 'pending') !== 'cancelled' && (
                               <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded">
                                 Upcoming
                               </span>
                             )}
-                            <span className={`px-2 py-0.5 rounded text-xs font-medium ${getStatusColor(registration.status)}`}>
-                              {registration.status.charAt(0).toUpperCase() + registration.status.slice(1)}
+                            <span className={`px-2 py-0.5 rounded text-xs font-medium ${getStatusColor(registration.status || 'pending')}`}>
+                              {(registration.status || 'pending').charAt(0).toUpperCase() + (registration.status || 'pending').slice(1)}
                             </span>
                           </div>
                           <Link
@@ -291,10 +293,10 @@ const MyRegistrations: React.FC = () => {
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-bold text-purple-600">
-                            {registration.ticket_quantity} {registration.ticket_quantity === 1 ? 'Ticket' : 'Tickets'}
+                            {registration.quantity} {registration.quantity === 1 ? 'Ticket' : 'Tickets'}
                           </p>
                           <p className="text-sm text-gray-600">
-                            ${registration.total_amount.toLocaleString()}
+                            ${(registration.total_price || 0).toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -332,7 +334,7 @@ const MyRegistrations: React.FC = () => {
                             Contact Organizer
                           </button>
                         )}
-                        {registration.event && isUpcoming(registration.event.start_date) && registration.status === 'confirmed' && (
+                        {registration.event && isUpcoming(registration.event.start_date) && (registration.status === 'confirmed' || registration.payment_status === 'paid') && (
                           <button
                             onClick={() => handleCancelRegistration(registration.id)}
                             className="flex items-center gap-2 px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50"
