@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock } from 'lucide-react';
 
 
@@ -63,7 +64,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
       {/* Event Details */}
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{title}</h3>
+        <Link to={`/event/${id}`} className="font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-purple-600 transition-colors block">{title}</Link>
         
         <div className="space-y-2 mb-4 text-sm text-gray-600">
           <div className="flex items-center space-x-2">
