@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Language, Translations, translations } from './translations';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { type Language, type Translations, translations } from './translations';
 
 const LANGUAGE_STORAGE_KEY = 'zade_language';
 
