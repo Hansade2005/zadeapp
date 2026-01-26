@@ -53,17 +53,21 @@ interface JobApplication {
   status: 'pending' | 'accepted' | 'rejected';
   created_at: string;
   applicant?: { full_name: string; email: string; user_type: string };
-  job?: { title: string; company_name: string; location: string };
+  job?: { title: string; company: string; location: string };
 }
 
 interface EventRegistration {
   id: string;
   event_id: string;
-  attendee_id: string;
-  status: 'registered' | 'attended' | 'cancelled';
+  user_id: string;
+  ticket_type: string;
+  quantity: number;
+  total_price: number;
+  payment_status: string;
+  status: string | null;
   created_at: string;
-  attendee?: { full_name: string; email: string };
-  event?: { title: string; event_date: string; location: string };
+  user?: { full_name: string; email: string };
+  event?: { title: string; start_date: string; location: string };
 }
 
 interface FreelanceContact {
@@ -152,7 +156,7 @@ const MyProducts: React.FC = () => {
         .select(`
           *,
           applicant:users!job_applications_applicant_id_fkey(full_name, email, user_type),
-          job:jobs!job_applications_job_id_fkey(title, company_name, location)
+          job:jobs!job_applications_job_id_fkey(title, company, location)
         `)
         .eq('job.employer_id', user.id)
         .order('created_at', { ascending: false });
@@ -172,10 +176,10 @@ const MyProducts: React.FC = () => {
         .from('event_registrations')
         .select(`
           *,
-          attendee:users!event_registrations_attendee_id_fkey(full_name, email),
-          event:events!event_registrations_event_id_fkey(title, event_date, location)
+          user:users!event_registrations_user_id_fkey(full_name, email),
+          event:events!event_registrations_event_id_fkey(title, start_date, location)
         `)
-        .eq('event.host_id', user.id)
+        .eq('event.organizer_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -553,7 +557,7 @@ const MyProducts: React.FC = () => {
                           <div className="flex justify-between items-start mb-4">
                             <div>
                               <h3 className="text-lg font-semibold text-gray-900">{application.job?.title}</h3>
-                              <p className="text-gray-600">{application.job?.company_name}</p>
+                              <p className="text-gray-600">{application.job?.company}</p>
                               <p className="text-sm text-gray-500">{application.job?.location}</p>
                             </div>
                             <span className={`px-2 py-1 text-xs rounded-full ${
@@ -599,23 +603,23 @@ const MyProducts: React.FC = () => {
                               <h3 className="text-lg font-semibold text-gray-900">{registration.event?.title}</h3>
                               <p className="text-gray-600">{registration.event?.location}</p>
                               <p className="text-sm text-gray-500">
-                                {new Date(registration.event?.event_date || '').toLocaleDateString()}
+                                {new Date(registration.event?.start_date || '').toLocaleDateString()}
                               </p>
                             </div>
                             <span className={`px-2 py-1 text-xs rounded-full ${
-                              registration.status === 'attended' ? 'bg-green-100 text-green-800' :
-                              registration.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                              registration.payment_status === 'paid' ? 'bg-green-100 text-green-800' :
+                              registration.payment_status === 'failed' ? 'bg-red-100 text-red-800' :
                               'bg-blue-100 text-blue-800'
                             }`}>
-                              {registration.status}
+                              {registration.payment_status}
                             </span>
                           </div>
                           <div className="border-t pt-4">
                             <p className="text-sm text-gray-600">
-                              <strong>Attendee:</strong> {registration.attendee?.full_name}
+                              <strong>Attendee:</strong> {registration.user?.full_name}
                             </p>
                             <p className="text-sm text-gray-600">
-                              <strong>Email:</strong> {registration.attendee?.email}
+                              <strong>Email:</strong> {registration.user?.email}
                             </p>
                             <p className="text-sm text-gray-500 mt-2">
                               Registered on {new Date(registration.created_at).toLocaleDateString()}
