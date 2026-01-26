@@ -7,7 +7,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import { Bell, Moon, Sun, Globe, Shield, Save, Eye, EyeOff, AlertTriangle, Trash2, Key, ArrowLeft } from 'lucide-react';
-import { useLanguage, Language } from '../i18n';
+import { useLanguage, type Language } from '../i18n';
 
 interface UserSettings {
   emailNotifications: boolean;
