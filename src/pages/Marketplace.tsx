@@ -190,13 +190,13 @@ const Marketplace: React.FC = () => {
         } else {
           newCart = [...prev, {
             id: product.id,
-            name: product.name,
+            name: product.title,
             price: product.price,
             quantity: 1,
-            image: product.image,
-            vendor: product.vendor,
+            image: product.images?.[0] || 'https://placehold.co/400x400',
+            vendor: product.users?.full_name || 'Vendor',
             productId: product.id,
-            sellerId: product.sellerId || ''
+            sellerId: product.seller_id || ''
           }];
         }
         localStorage.setItem('cart', JSON.stringify(newCart));

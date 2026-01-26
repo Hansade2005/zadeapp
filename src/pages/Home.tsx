@@ -172,7 +172,9 @@ const Home: React.FC = () => {
   };
 
   const handleAddToCart = (productId: string) => {
-    const product = featuredProducts.find(p => p.id === productId);
+    // Search in both featured and boosted products
+    const product = featuredProducts.find(p => p.id === productId) ||
+                    boostedProducts.find(p => p.id === productId);
     if (product) {
       setCartItems(prev => {
         const existing = prev.find(item => item.id === productId);
