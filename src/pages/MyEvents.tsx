@@ -7,7 +7,8 @@ import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import EventForm from '../components/EventForm';
 import { BoostManager } from '../components/BoostManager';
-import { Calendar, MapPin, Users, Clock, Trash2, Plus, Edit, Zap } from 'lucide-react';
+import { EventRegistrationsManager } from '../components/EventRegistrationsManager';
+import { Calendar, MapPin, Users, Clock, Trash2, Plus, Edit, Zap, Eye } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -39,6 +40,7 @@ const MyEvents: React.FC = () => {
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [boostingEvent, setBoostingEvent] = useState<string | null>(null);
+  const [viewingRegistrationsEvent, setViewingRegistrationsEvent] = useState<Event | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -220,10 +222,14 @@ const MyEvents: React.FC = () => {
                           <span>{event.location}{event.venue && ` • ${event.venue}`}</span>
                         </div>
 
-                        <div className="flex items-center text-sm text-gray-600">
+                        <button
+                          onClick={() => setViewingRegistrationsEvent(event)}
+                          className="flex items-center text-sm text-purple-600 hover:text-purple-800 font-medium"
+                        >
                           <Users className="w-4 h-4 mr-2" />
                           <span>{event.current_attendees}{event.max_attendees ? `/${event.max_attendees}` : ''} attendees</span>
-                        </div>
+                          <Eye className="w-4 h-4 ml-1" />
+                        </button>
                       </div>
 
                       <div className="mt-4 pt-4 border-t border-gray-100">
@@ -279,6 +285,16 @@ const MyEvents: React.FC = () => {
             setBoostingEvent(null);
             toast.success('Event boosted successfully!');
           }}
+        />
+      )}
+
+      {viewingRegistrationsEvent && (
+        <EventRegistrationsManager
+          eventId={viewingRegistrationsEvent.id}
+          eventTitle={viewingRegistrationsEvent.title}
+          eventDate={formatDate(viewingRegistrationsEvent.start_date)}
+          maxAttendees={viewingRegistrationsEvent.max_attendees}
+          onClose={() => setViewingRegistrationsEvent(null)}
         />
       )}
 

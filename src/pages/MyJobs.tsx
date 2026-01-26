@@ -7,7 +7,8 @@ import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import JobForm from '../components/JobForm';
 import { BoostManager } from '../components/BoostManager';
-import { Briefcase, MapPin, Users, Calendar, Trash2, Plus, Edit, Zap } from 'lucide-react';
+import { JobApplicationsManager } from '../components/JobApplicationsManager';
+import { Briefcase, MapPin, Users, Calendar, Trash2, Plus, Edit, Zap, Eye } from 'lucide-react';
 
 interface Job {
   id: string;
@@ -40,6 +41,7 @@ const MyJobs: React.FC = () => {
   const [showJobForm, setShowJobForm] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [boostingJob, setBoostingJob] = useState<string | null>(null);
+  const [viewingApplicationsJob, setViewingApplicationsJob] = useState<Job | null>(null);
 
   useEffect(() => {
     fetchJobs();
@@ -202,10 +204,14 @@ const MyJobs: React.FC = () => {
                           <span>{job.type}</span>
                         </div>
 
-                        <div className="flex items-center text-sm text-gray-600">
+                        <button
+                          onClick={() => setViewingApplicationsJob(job)}
+                          className="flex items-center text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                        >
                           <Users className="w-4 h-4 mr-2" />
-                          <span>{job.applications_count} applications</span>
-                        </div>
+                          <span>{job.applications_count || 0} applications</span>
+                          <Eye className="w-4 h-4 ml-1" />
+                        </button>
                       </div>
 
                       <div className="mt-4 pt-4 border-t border-gray-100">
@@ -289,6 +295,15 @@ const MyJobs: React.FC = () => {
             setBoostingJob(null);
             toast.success('Job boosted successfully!');
           }}
+        />
+      )}
+
+      {viewingApplicationsJob && (
+        <JobApplicationsManager
+          jobId={viewingApplicationsJob.id}
+          jobTitle={viewingApplicationsJob.title}
+          company={viewingApplicationsJob.company}
+          onClose={() => setViewingApplicationsJob(null)}
         />
       )}
     </div>

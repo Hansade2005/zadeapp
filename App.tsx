@@ -25,6 +25,8 @@ import MyProducts from './src/pages/MyProducts';
 import MyJobs from './src/pages/MyJobs';
 import MyEvents from './src/pages/MyEvents';
 import MyOrders from './src/pages/MyOrders';
+import MyApplications from './src/pages/MyApplications';
+import MyRegistrations from './src/pages/MyRegistrations';
 import FreelanceProfile from './src/pages/FreelanceProfile';
 import Settings from './src/pages/Settings';
 import Checkout from './src/pages/Checkout';
@@ -66,6 +68,8 @@ const App: React.FC = () => {
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path="/my-events" element={<MyEvents />} />
             <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/my-applications" element={<MyApplications />} />
+            <Route path="/my-registrations" element={<MyRegistrations />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/freelance-profile" element={<FreelanceProfile />} />
