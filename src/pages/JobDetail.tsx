@@ -18,7 +18,7 @@ interface Job {
   title: string;
   company: string;
   description: string;
-  requirements: string[];
+  requirements: string[] | string;
   location: string;
   job_type: string;
   salary_min?: number;
