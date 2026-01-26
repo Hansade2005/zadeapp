@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import { Bell, Moon, Sun, Globe, Shield, Save, Eye, EyeOff, AlertTriangle, Trash2, Key, ArrowLeft } from 'lucide-react';
+import { useLanguage, Language } from '../i18n';
 
 interface UserSettings {
   emailNotifications: boolean;
@@ -20,6 +21,7 @@ interface UserSettings {
 const Settings: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useLanguage();
   const [saving, setSaving] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -316,16 +318,19 @@ const Settings: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Language
+                      {t.settings.language}
                     </label>
                     <select
-                      value={settings.language}
-                      onChange={(e) => updateSetting('language', e.target.value)}
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value as Language)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     >
                       <option value="en">English</option>
                       <option value="fr">Français</option>
                     </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {language === 'en' ? 'Language changes apply immediately' : 'Les changements de langue s\'appliquent immédiatement'}
+                    </p>
                   </div>
 
                   <div>

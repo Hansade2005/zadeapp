@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { LanguageProvider } from './src/i18n';
 
 import Home from './src/pages/Home';
 import Marketplace from './src/pages/Marketplace';
@@ -45,9 +46,10 @@ import NotFound from './src/pages/NotFound';
 
 const App: React.FC = () => {
   return (
-    <Theme appearance="inherit" radius="large" scaling="100%">
-      <AuthProvider>
-        <Router>
+    <LanguageProvider>
+      <Theme appearance="inherit" radius="large" scaling="100%">
+        <AuthProvider>
+          <Router>
         <main className="min-h-screen font-sans">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -97,9 +99,10 @@ const App: React.FC = () => {
             pauseOnHover
           />
         </main>
-      </Router>
-      </AuthProvider>
-    </Theme>
+        </Router>
+        </AuthProvider>
+      </Theme>
+    </LanguageProvider>
   );
 }
 
