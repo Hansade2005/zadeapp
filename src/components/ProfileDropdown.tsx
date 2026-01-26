@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, Settings, LogOut, ChevronDown, UserCheck, Briefcase, Calendar, Users, MessageCircle, Package, FileText, Ticket, Music } from 'lucide-react';
+import { User, Settings, LogOut, ChevronDown, UserCheck, Briefcase, Calendar, Users, MessageCircle, Package, FileText, Ticket, Music, Wallet } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -43,6 +43,11 @@ const ProfileDropdown: React.FC = () => {
       label: 'My Orders',
       href: '/my-orders',
       icon: Package,
+    },
+    {
+      label: 'Seller Wallet',
+      href: '/seller-wallet',
+      icon: Wallet,
     },
     {
       label: 'My Jobs',

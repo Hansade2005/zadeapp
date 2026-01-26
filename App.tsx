@@ -33,12 +33,14 @@ import Settings from './src/pages/Settings';
 import Checkout from './src/pages/Checkout';
 import OrderSuccess from './src/pages/OrderSuccess';
 import AdminDashboard from './src/pages/AdminDashboard';
+import AdminPayouts from './src/pages/AdminPayouts';
 import EnhancedProfile from './src/pages/EnhancedProfile';
 import MyCredits from './src/pages/MyCredits';
 import Wishlist from './src/pages/Wishlist';
 import ProductDetail from './src/pages/ProductDetail';
 import Messages from './src/pages/Messages';
 import Notifications from './src/pages/Notifications';
+import SellerWallet from './src/pages/SellerWallet';
 import NotFound from './src/pages/NotFound';
 
 const App: React.FC = () => {
@@ -80,6 +82,9 @@ const App: React.FC = () => {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/payouts" element={<AdminPayouts />} />
+            <Route path="/seller-wallet" element={<SellerWallet />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="*" element={<NotFound />} />

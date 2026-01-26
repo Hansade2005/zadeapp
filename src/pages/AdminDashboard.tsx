@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { 
+import {
   Users, Package, Briefcase, Calendar, TrendingUp, DollarSign,
-  Shield, AlertTriangle, CheckCircle, XCircle, Ban, Eye, Lock, Trash2, UserX, Music, Palette, Plus, Minus, X
+  Shield, AlertTriangle, CheckCircle, XCircle, Ban, Eye, Lock, Trash2, UserX, Music, Palette, Plus, Minus, X, Wallet, ArrowRight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Header from '../components/Header';
@@ -36,6 +37,7 @@ interface User {
 }
 
 export const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -790,7 +792,53 @@ export const AdminDashboard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Recent Activity */}
+              {/* Quick Actions */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <button
+                    onClick={() => navigate('/admin/payouts')}
+                    className="flex items-center justify-between p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Wallet className="h-6 w-6 text-indigo-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">Manage Payouts</p>
+                        <p className="text-sm text-gray-500">Review seller payout requests</p>
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-indigo-600" />
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('users')}
+                    className="flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Users className="h-6 w-6 text-blue-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">Manage Users</p>
+                        <p className="text-sm text-gray-500">View and manage user accounts</p>
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-blue-600" />
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('content')}
+                    className="flex items-center justify-between p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Package className="h-6 w-6 text-green-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">Moderate Content</p>
+                        <p className="text-sm text-gray-500">Review products, jobs, events</p>
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-green-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Platform Health */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Platform Health</h2>
                 <div className="space-y-3">
