@@ -54,10 +54,13 @@ const StripeCheckout: React.FC<StripeCheckoutProps> = ({
       }
 
       try {
+        // Stripe expects amounts in cents (smallest currency unit)
+        const totalInCents = Math.round(total * 100);
+
         const { data, error } = await supabase.functions.invoke('create-payment-intent', {
           body: {
             items: cartItems,
-            total: total,
+            total: totalInCents,
           },
         });
 

@@ -163,7 +163,7 @@ const MyCredits: React.FC = () => {
           user_id: user.id,
           amount: credits,
           transaction_type: 'purchase',
-          description: `Purchased ${credits} credits for $${price.toLocaleString()}`,
+          description: `Purchased ${credits} credits for $${(price / 100).toLocaleString()}`,
         });
 
       if (txError) throw txError;
@@ -270,10 +270,10 @@ const MyCredits: React.FC = () => {
                     <div className="text-4xl font-bold text-indigo-600 mb-2">{pkg.credits}</div>
                     <div className="text-sm text-gray-600 mb-4">Credits</div>
                     <div className="text-2xl font-bold text-gray-900 mb-4">
-                      ${pkg.price.toLocaleString()}
+                      ${(pkg.price / 100).toLocaleString()}
                     </div>
                     <div className="text-sm text-gray-500">
-                      ${(pkg.price / pkg.credits).toFixed(0)} per credit
+                      ${((pkg.price / 100) / pkg.credits).toFixed(2)} per credit
                     </div>
                   </div>
                 </div>
@@ -288,7 +288,7 @@ const MyCredits: React.FC = () => {
                       You're purchasing {creditPackages[selectedPackage].credits} credits
                     </p>
                     <p className="text-sm text-gray-600">
-                      Total: ${creditPackages[selectedPackage].price.toLocaleString()}
+                      Total: ${(creditPackages[selectedPackage].price / 100).toLocaleString()}
                     </p>
                   </div>
                   <button
