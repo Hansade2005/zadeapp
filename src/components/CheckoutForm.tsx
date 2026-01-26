@@ -77,7 +77,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
           delivery_fee: 0, // No delivery cost
           delivery_address: shippingAddress,
           status: 'pending',
-          payment_status: 'processing'
+          payment_status: 'pending'
         };
 
         const { data: order, error: orderError } = await supabase
