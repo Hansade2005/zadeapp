@@ -115,7 +115,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Price */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mb-3">
           <span className="text-lg font-bold text-gray-900">
             ${price.toLocaleString()}
           </span>
@@ -125,6 +125,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           )}
         </div>
+
+        {/* Add to Cart Button - Always visible */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart?.(id);
+          }}
+          className="w-full bg-indigo-600 text-white py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-colors"
+        >
+          <ShoppingCart className="w-4 h-4" />
+          <span className="text-sm font-medium">Add to Cart</span>
+        </button>
       </div>
     </div>
   );
