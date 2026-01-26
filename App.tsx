@@ -42,6 +42,9 @@ import ProductDetail from './src/pages/ProductDetail';
 import Messages from './src/pages/Messages';
 import Notifications from './src/pages/Notifications';
 import SellerWallet from './src/pages/SellerWallet';
+import PrivacyPolicy from './src/pages/PrivacyPolicy';
+import TermsOfService from './src/pages/TermsOfService';
+import CookiePolicy from './src/pages/CookiePolicy';
 import NotFound from './src/pages/NotFound';
 
 const App: React.FC = () => {
@@ -89,6 +92,9 @@ const App: React.FC = () => {
             <Route path="/seller-wallet" element={<SellerWallet />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/cookies" element={<CookiePolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <ToastContainer

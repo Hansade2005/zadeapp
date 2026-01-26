@@ -8,8 +8,10 @@ import MobileBottomNav from '../components/MobileBottomNav';
 import EventCard from '../components/EventCard';
 import EventRegistrationModal from '../components/EventRegistrationModal';
 import { EventApplicationModal } from '../components/EventApplicationModal';
+import { useLanguage } from '../i18n';
 
 const Events: React.FC = () => {
+  const { t } = useLanguage();
   const [events, setEvents] = useState<any[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -151,9 +153,9 @@ const Events: React.FC = () => {
         <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">Discover Amazing Events</h1>
+              <h1 className="text-4xl font-bold mb-4">{t.events.title}</h1>
               <p className="text-xl text-purple-100 mb-8">
-                Connect, learn, and have fun at events happening across Canada
+                {t.events.searchPlaceholder}
               </p>
               
               {/* Event Search */}

@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import ProfileDropdown from './ProfileDropdown';
 import { NotificationBell } from './NotificationBell';
+import { useLanguage } from '../i18n';
 
 interface HeaderProps {
   onCartClick?: () => void;
@@ -20,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({
   const [wishlistCount, setWishlistCount] = useState(0);
   const [cartItemCount, setCartItemCount] = useState(0);
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (user) {
@@ -54,11 +56,11 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const navItems = [
-    { name: 'Shop', path: '/shop' },
-    { name: 'Jobs', path: '/jobs' },
-    { name: 'Events', path: '/events' },
-    { name: 'Freelance', path: '/freelance' },
-    { name: 'Artists', path: '/artistes' },
+    { name: t.nav.marketplace, path: '/shop' },
+    { name: t.nav.jobs, path: '/jobs' },
+    { name: t.nav.events, path: '/events' },
+    { name: t.nav.freelancers, path: '/freelance' },
+    { name: t.nav.artistes, path: '/artistes' },
   ];
 
   return (
@@ -93,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({
               <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Search products, jobs, events..."
+                placeholder={t.common.search + '...'}
                 className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:bg-white text-sm transition-all duration-200"
               />
             </div>
@@ -164,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({
                 to="/login"
                 className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-600 transition-all duration-200 text-sm font-medium whitespace-nowrap shadow-sm hover:shadow-md"
               >
-                Sign In
+                {t.nav.signIn}
               </Link>
             )}
 
@@ -185,7 +187,7 @@ const Header: React.FC<HeaderProps> = ({
               <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Search products, jobs, events..."
+                placeholder={t.common.search + '...'}
                 className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:bg-white text-sm transition-all duration-200"
                 autoFocus
               />

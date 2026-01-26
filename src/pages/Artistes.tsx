@@ -6,9 +6,11 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import ArtisteCard from '../components/ArtisteCard';
+import { useLanguage } from '../i18n';
 
 const Artistes: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [artistes, setArtistes] = useState<any[]>([]);
   const [filteredArtistes, setFilteredArtistes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,8 +130,8 @@ const Artistes: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
           <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg p-8 mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Find the Perfect Artiste</h1>
-            <p className="text-lg opacity-90">Book talented performers for your next event</p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">{t.artistes.title}</h1>
+            <p className="text-lg opacity-90">{t.artistes.searchPlaceholder}</p>
           </div>
 
           {/* Search and Filters */}

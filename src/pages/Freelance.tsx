@@ -9,8 +9,10 @@ import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 import FreelancerCard from '../components/FreelancerCard';
 import { ContactFreelancerModal } from '../components/ContactFreelancerModal';
+import { useLanguage } from '../i18n';
 
 const Freelance: React.FC = () => {
+  const { t } = useLanguage();
   const [freelancers, setFreelancers] = useState<any[]>([]);
   const [filteredFreelancers, setFilteredFreelancers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -118,9 +120,9 @@ const Freelance: React.FC = () => {
         <section className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">Find Talented Freelancers</h1>
+              <h1 className="text-4xl font-bold mb-4">{t.freelancers.title}</h1>
               <p className="text-xl text-green-100 mb-8">
-                Connect with skilled professionals across Canada for your projects
+                {t.freelancers.searchPlaceholder}
               </p>
               
               {/* Freelancer Search */}
