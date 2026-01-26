@@ -153,13 +153,24 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                   Proceed to Checkout
                 </button>
 
-                {/* Continue Shopping */}
-                <button
-                  onClick={onClose}
-                  className="w-full text-indigo-600 py-2 text-sm font-medium hover:text-indigo-700 transition-colors"
-                >
-                  Continue Shopping
-                </button>
+                {/* Clear Cart & Continue Shopping */}
+                <div className="flex gap-3">
+                  {onClearCart && (
+                    <button
+                      onClick={onClearCart}
+                      className="flex-1 flex items-center justify-center gap-2 text-red-600 py-2 text-sm font-medium hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Clear Cart
+                    </button>
+                  )}
+                  <button
+                    onClick={onClose}
+                    className="flex-1 text-indigo-600 py-2 text-sm font-medium hover:text-indigo-700 transition-colors"
+                  >
+                    Continue Shopping
+                  </button>
+                </div>
               </div>
             )}
           </div>
