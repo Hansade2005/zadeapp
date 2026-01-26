@@ -271,6 +271,11 @@ const Marketplace: React.FC = () => {
     localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
+  const handleClearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem('cart');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header onCartClick={() => setIsCartOpen(true)} />
@@ -405,6 +410,7 @@ const Marketplace: React.FC = () => {
         items={cartItems}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
+        onClearCart={handleClearCart}
       />
     </div>
   );

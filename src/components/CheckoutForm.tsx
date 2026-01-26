@@ -52,10 +52,25 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     try {
       // Create orders for each cart item
       const orderPromises = cartItems.map(async (item) => {
+        // Handle both old and new cart item structures
+        const sellerId = item.sellerId || (item as any).seller_id || '';
+        const productId = item.productId || item.id || '';
+
+        // Validate UUIDs - check if they look like valid UUIDs
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+        if (!sellerId || !uuidRegex.test(sellerId)) {
+          throw new Error(`Invalid seller for product "${item.name || (item as any).title}". Please remove this item and add it again.`);
+        }
+
+        if (!productId || !uuidRegex.test(productId)) {
+          throw new Error(`Invalid product ID for "${item.name || (item as any).title}". Please remove this item and add it again.`);
+        }
+
         const orderData = {
           buyer_id: user.id,
-          seller_id: item.sellerId,
-          product_id: item.productId,
+          seller_id: sellerId,
+          product_id: productId,
           quantity: item.quantity,
           unit_price: item.price,
           total_price: item.price * item.quantity,
