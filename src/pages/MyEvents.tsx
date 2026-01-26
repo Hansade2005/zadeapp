@@ -8,7 +8,8 @@ import MobileBottomNav from '../components/MobileBottomNav';
 import EventForm from '../components/EventForm';
 import { BoostManager } from '../components/BoostManager';
 import { EventRegistrationsManager } from '../components/EventRegistrationsManager';
-import { Calendar, MapPin, Users, Clock, Trash2, Plus, Edit, Zap, Eye } from 'lucide-react';
+import { EventApplicationsManager } from '../components/EventApplicationsManager';
+import { Calendar, MapPin, Users, Clock, Trash2, Plus, Edit, Zap, Eye, Music } from 'lucide-react';
 
 interface Event {
   id: string;
@@ -41,6 +42,7 @@ const MyEvents: React.FC = () => {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [boostingEvent, setBoostingEvent] = useState<string | null>(null);
   const [viewingRegistrationsEvent, setViewingRegistrationsEvent] = useState<Event | null>(null);
+  const [viewingApplicationsEvent, setViewingApplicationsEvent] = useState<Event | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -230,6 +232,15 @@ const MyEvents: React.FC = () => {
                           <span>{event.current_attendees}{event.max_attendees ? `/${event.max_attendees}` : ''} attendees</span>
                           <Eye className="w-4 h-4 ml-1" />
                         </button>
+
+                        <button
+                          onClick={() => setViewingApplicationsEvent(event)}
+                          className="flex items-center text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                        >
+                          <Music className="w-4 h-4 mr-2" />
+                          <span>Artist Applications</span>
+                          <Eye className="w-4 h-4 ml-1" />
+                        </button>
                       </div>
 
                       <div className="mt-4 pt-4 border-t border-gray-100">
@@ -295,6 +306,14 @@ const MyEvents: React.FC = () => {
           eventDate={formatDate(viewingRegistrationsEvent.start_date)}
           maxAttendees={viewingRegistrationsEvent.max_attendees}
           onClose={() => setViewingRegistrationsEvent(null)}
+        />
+      )}
+
+      {viewingApplicationsEvent && (
+        <EventApplicationsManager
+          eventId={viewingApplicationsEvent.id}
+          eventTitle={viewingApplicationsEvent.title}
+          onClose={() => setViewingApplicationsEvent(null)}
         />
       )}
 
