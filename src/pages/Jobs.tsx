@@ -11,8 +11,10 @@ import JobApplicationModal from '../components/JobApplicationModal';
 import { JobFilterPanel } from '../components/JobFilterPanel';
 import type { JobFilters } from '../components/JobFilterPanel';
 import { filterByRadius, formatDistance } from '../lib/locationUtils';
+import { useLanguage } from '../i18n';
 
 const Jobs: React.FC = () => {
+  const { t } = useLanguage();
   const [jobs, setJobs] = useState<any[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -188,9 +190,9 @@ const Jobs: React.FC = () => {
         <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">Find Your Dream Job</h1>
+              <h1 className="text-4xl font-bold mb-4">{t.jobs.title}</h1>
               <p className="text-xl text-indigo-100 mb-8">
-                Discover thousands of opportunities from top Canadian companies
+                {t.jobs.searchPlaceholder}
               </p>
             </div>
           </div>

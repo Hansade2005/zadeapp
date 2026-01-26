@@ -12,6 +12,7 @@ import CartDrawer from '../components/CartDrawer';
 import { ProductFilterPanel } from '../components/ProductFilterPanel';
 import type { ProductFilters } from '../components/ProductFilterPanel';
 import { filterByRadius, calculateDistance } from '../lib/locationUtils';
+import { useLanguage } from '../i18n';
 
 interface CartItem {
   id: string;
@@ -24,6 +25,7 @@ interface CartItem {
 
 const Marketplace: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -285,9 +287,9 @@ const Marketplace: React.FC = () => {
         <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">Marketplace</h1>
+              <h1 className="text-4xl font-bold mb-4">{t.marketplace.title}</h1>
               <p className="text-xl text-indigo-100">
-                Discover amazing products from trusted Canadian vendors
+                {t.marketplace.searchPlaceholder}
               </p>
             </div>
           </div>

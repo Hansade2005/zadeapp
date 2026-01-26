@@ -8,8 +8,10 @@ import MobileBottomNav from '../components/MobileBottomNav';
 import ProductCard from '../components/ProductCard';
 import CartDrawer from '../components/CartDrawer';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../i18n';
 
 const Home: React.FC = () => {
+  const { t } = useLanguage();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<any[]>([]);
 
@@ -240,28 +242,24 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                  Canada's Premier
-                  <span className="block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                    Multi-Marketplace
-                  </span>
+                  {t.home.heroTitle}
                 </h1>
                 <p className="text-xl mb-8 text-gray-200">
-                  Shop, work, connect, and grow with millions across Canada and beyond. 
-                  Your one-stop platform for everything you need.
+                  {t.home.heroSubtitle}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link
                     to="/marketplace"
                     className="bg-white text-indigo-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center"
                   >
-                    Start Shopping
+                    {t.home.exploreMarketplace}
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Link>
                   <Link
                     to="/jobs"
                     className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-indigo-900 transition-colors flex items-center justify-center"
                   >
-                    Find Jobs
+                    {t.home.findJobs}
                   </Link>
                 </div>
               </div>
@@ -331,14 +329,14 @@ const Home: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured Products</h2>
-                <p className="text-gray-600">Handpicked items from our top-rated vendors</p>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">{t.home.featuredProducts}</h2>
+                <p className="text-gray-600">{t.home.heroSubtitle}</p>
               </div>
               <Link
                 to="/marketplace"
                 className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
               >
-                View All
+                {t.home.viewAll}
                 <ArrowRight className="ml-1 w-4 h-4" />
               </Link>
             </div>
@@ -387,7 +385,7 @@ const Home: React.FC = () => {
                   to="/marketplace"
                   className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
                 >
-                  View All
+                  {t.home.viewAll}
                   <ArrowRight className="ml-1 w-4 h-4" />
                 </Link>
               </div>

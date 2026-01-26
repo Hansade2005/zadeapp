@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, ShoppingBag, Briefcase, Calendar, Users } from 'lucide-react';
+import { useLanguage } from '../i18n';
 
 const MobileBottomNav: React.FC = () => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   const navItems = [
-    { name: 'Home', path: '/', icon: Home },
-    { name: 'Shop', path: '/marketplace', icon: ShoppingBag },
-    { name: 'Jobs', path: '/jobs', icon: Briefcase },
-    { name: 'Events', path: '/events', icon: Calendar },
-    { name: 'Freelance', path: '/freelance', icon: Users }
+    { name: t.nav.home, path: '/', icon: Home },
+    { name: t.nav.marketplace, path: '/marketplace', icon: ShoppingBag },
+    { name: t.nav.jobs, path: '/jobs', icon: Briefcase },
+    { name: t.nav.events, path: '/events', icon: Calendar },
+    { name: t.nav.freelancers, path: '/freelance', icon: Users }
   ];
 
   return (
@@ -22,7 +24,7 @@ const MobileBottomNav: React.FC = () => {
 
           return (
             <Link
-              key={item.name}
+              key={item.path}
               to={item.path}
               className="relative flex flex-col items-center py-1.5 sm:py-2 px-2 sm:px-3 min-w-0 flex-1 max-w-none"
             >
