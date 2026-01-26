@@ -50,22 +50,29 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
     setLoading(true);
 
     try {
+      // Validate all cart items first
+      for (const item of cartItems) {
+        const itemName = item.name || (item as any).title || `Item #${item.id?.slice(0, 8) || 'unknown'}`;
+        const sellerId = item.sellerId || (item as any).seller_id || '';
+        const productId = item.productId || item.id || '';
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+        if (!sellerId || !uuidRegex.test(sellerId)) {
+          console.error('Invalid cart item:', item);
+          throw new Error(`Cart item "${itemName}" has invalid data. Please clear your cart and re-add products.`);
+        }
+
+        if (!productId || !uuidRegex.test(productId)) {
+          console.error('Invalid cart item:', item);
+          throw new Error(`Cart item "${itemName}" has invalid data. Please clear your cart and re-add products.`);
+        }
+      }
+
       // Create orders for each cart item
       const orderPromises = cartItems.map(async (item) => {
         // Handle both old and new cart item structures
         const sellerId = item.sellerId || (item as any).seller_id || '';
         const productId = item.productId || item.id || '';
-
-        // Validate UUIDs - check if they look like valid UUIDs
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-        if (!sellerId || !uuidRegex.test(sellerId)) {
-          throw new Error(`Invalid seller for product "${item.name || (item as any).title}". Please remove this item and add it again.`);
-        }
-
-        if (!productId || !uuidRegex.test(productId)) {
-          throw new Error(`Invalid product ID for "${item.name || (item as any).title}". Please remove this item and add it again.`);
-        }
 
         const orderData = {
           buyer_id: user.id,
