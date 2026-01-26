@@ -206,11 +206,13 @@ const ProductDetail: React.FC = () => {
     } else {
       cart.push({
         id: product.id,
-        title: product.title,
+        name: product.title,
         price: product.price,
         image: product.images[0],
         quantity: quantity,
-        seller_id: product.seller_id,
+        vendor: product.seller?.full_name || 'Seller',
+        productId: product.id,
+        sellerId: product.seller_id,
       });
     }
 
