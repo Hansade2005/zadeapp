@@ -9,9 +9,12 @@ import { AuthProvider } from './src/contexts/AuthContext';
 import Home from './src/pages/Home';
 import Marketplace from './src/pages/Marketplace';
 import Jobs from './src/pages/Jobs';
+import JobDetail from './src/pages/JobDetail';
 import Events from './src/pages/Events';
+import EventDetail from './src/pages/EventDetail';
 import Freelance from './src/pages/Freelance';
 import Artistes from './src/pages/Artistes';
+import ArtisteDetail from './src/pages/ArtisteDetail';
 import ArtisteProfile from './src/pages/ArtisteProfile';
 import Login from './src/pages/Login';
 import Signup from './src/pages/Signup';
@@ -21,6 +24,7 @@ import Profile from './src/pages/Profile';
 import MyProducts from './src/pages/MyProducts';
 import MyJobs from './src/pages/MyJobs';
 import MyEvents from './src/pages/MyEvents';
+import MyOrders from './src/pages/MyOrders';
 import FreelanceProfile from './src/pages/FreelanceProfile';
 import Settings from './src/pages/Settings';
 import Checkout from './src/pages/Checkout';
@@ -45,9 +49,12 @@ const App: React.FC = () => {
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/shop" element={<Marketplace />} />
             <Route path="/jobs" element={<Jobs />} />
+            <Route path="/job/:id" element={<JobDetail />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/event/:id" element={<EventDetail />} />
             <Route path="/freelance" element={<Freelance />} />
             <Route path="/artistes" element={<Artistes />} />
+            <Route path="/artiste/:id" element={<ArtisteDetail />} />
             <Route path="/artiste-profile" element={<ArtisteProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -58,6 +65,7 @@ const App: React.FC = () => {
             <Route path="/my-products" element={<MyProducts />} />
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path="/my-events" element={<MyEvents />} />
+            <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/messages" element={<Messages />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/freelance-profile" element={<FreelanceProfile />} />

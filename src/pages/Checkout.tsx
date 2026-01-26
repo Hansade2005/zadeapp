@@ -153,11 +153,11 @@ const Checkout: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 mb-2">
                   <span>Shipping:</span>
-                  <span>${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) > 50000 ? 0 : 2500}</span>
+                  <span className="text-green-600">Free</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold text-gray-900 pt-2 border-t border-gray-200">
                   <span>Total:</span>
-                  <span>${(cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) > 50000 ? 0 : 2500)).toLocaleString()}</span>
+                  <span>${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString()}</span>
                 </div>
               </div>
             </div>

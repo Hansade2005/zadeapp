@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin, Clock, DollarSign, Building, CheckCircle } from 'lucide-react';
 
 interface JobCardProps {
@@ -46,7 +47,7 @@ const JobCard: React.FC<JobCardProps> = ({
             </div>
           )}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>
+            <Link to={`/job/${id}`} className="font-semibold text-gray-900 mb-1 hover:text-indigo-600 transition-colors block">{title}</Link>
             <p className="text-gray-600 font-medium">{company}</p>
           </div>
         </div>

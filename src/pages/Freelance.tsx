@@ -145,10 +145,16 @@ const Freelance: React.FC = () => {
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 appearance-none"
                       >
                         <option>All Locations</option>
-                        <option>Lagos</option>
-                        <option>Abuja</option>
-                        <option>Port Harcourt</option>
-                        <option>Kano</option>
+                        <option>Toronto</option>
+                        <option>Vancouver</option>
+                        <option>Montreal</option>
+                        <option>Calgary</option>
+                        <option>Edmonton</option>
+                        <option>Ottawa</option>
+                        <option>Winnipeg</option>
+                        <option>Quebec City</option>
+                        <option>Hamilton</option>
+                        <option>Kitchener</option>
                       </select>
                     </div>
                     <button
