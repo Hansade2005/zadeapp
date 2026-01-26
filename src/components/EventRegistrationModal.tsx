@@ -58,7 +58,7 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
         .from('event_registrations')
         .select('id')
         .eq('event_id', eventId)
-        .eq('attendee_id', user.id)
+        .eq('user_id', user.id)
         .single();
 
       if (existingRegistration) {
@@ -77,14 +77,12 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
         .from('event_registrations')
         .insert({
           event_id: eventId,
-          attendee_id: user.id,
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          special_requests: formData.specialRequests,
-          registration_date: new Date().toISOString(),
-          status: isFree ? 'confirmed' : 'pending_payment',
-          payment_status: isFree ? 'paid' : 'pending'
+          user_id: user.id,
+          ticket_type: 'regular',
+          quantity: 1,
+          total_price: eventPrice,
+          payment_status: isFree ? 'paid' : 'pending',
+          status: isFree ? 'confirmed' : 'pending'
         });
 
       if (error) throw error;
