@@ -563,6 +563,10 @@ const ProductDetail: React.FC = () => {
           setCartItems(newCart);
           localStorage.setItem('cart', JSON.stringify(newCart));
         }}
+        onClearCart={() => {
+          setCartItems([]);
+          localStorage.removeItem('cart');
+        }}
       />
 
       {/* Contact Seller Modal */}
