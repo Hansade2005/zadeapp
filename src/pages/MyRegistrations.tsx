@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
+import { ContactOrganizerModal } from '../components/ContactOrganizerModal';
 
 interface Registration {
   id: string;
@@ -34,6 +35,9 @@ interface Registration {
     price: number;
     images?: string[];
     organizer_id: string;
+    organizer?: {
+      full_name: string;
+    };
   };
 }
 
@@ -43,6 +47,13 @@ const MyRegistrations: React.FC = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'past' | 'cancelled'>('all');
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<{
+    id: string;
+    title: string;
+    organizerId: string;
+    organizerName: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -60,7 +71,8 @@ const MyRegistrations: React.FC = () => {
           *,
           event:events!event_registrations_event_id_fkey(
             id, title, description, start_date, end_date, start_time, end_time,
-            location, venue, price, images, organizer_id
+            location, venue, price, images, organizer_id,
+            organizer:users!events_organizer_id_fkey(full_name)
           )
         `)
         .eq('user_id', user?.id)
@@ -327,7 +339,15 @@ const MyRegistrations: React.FC = () => {
                         </Link>
                         {registration.event?.organizer_id && (
                           <button
-                            onClick={() => navigate('/messages', { state: { recipientId: registration.event?.organizer_id } })}
+                            onClick={() => {
+                              setSelectedEvent({
+                                id: registration.event!.id,
+                                title: registration.event!.title,
+                                organizerId: registration.event!.organizer_id,
+                                organizerName: registration.event!.organizer?.full_name || 'Event Organizer'
+                              });
+                              setShowContactModal(true);
+                            }}
                             className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
                           >
                             <MessageCircle className="w-4 h-4" />
@@ -355,6 +375,20 @@ const MyRegistrations: React.FC = () => {
 
       <Footer />
       <MobileBottomNav />
+
+      {/* Contact Organizer Modal */}
+      {showContactModal && selectedEvent && (
+        <ContactOrganizerModal
+          organizerId={selectedEvent.organizerId}
+          organizerName={selectedEvent.organizerName}
+          eventTitle={selectedEvent.title}
+          eventId={selectedEvent.id}
+          onClose={() => {
+            setShowContactModal(false);
+            setSelectedEvent(null);
+          }}
+        />
+      )}
     </div>
   );
 };
