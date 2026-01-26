@@ -100,6 +100,7 @@ module.exports = {
       fontFamily: {
         sans: [
                 "'Inter'",
+                "'Manrope'",
                 "ui-sans-serif",
                 "system-ui",
                 "-apple-system",
@@ -109,6 +110,13 @@ module.exports = {
                 "'Helvetica Neue'",
                 "Arial",
                 "'Noto Sans'",
+                "sans-serif"
+        ],
+        display: [
+                "'Manrope'",
+                "'Inter'",
+                "ui-sans-serif",
+                "system-ui",
                 "sans-serif"
         ],
         serif: [

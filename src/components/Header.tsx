@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 w-full overflow-hidden">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 w-full">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 min-w-0">
           {/* Logo */}
