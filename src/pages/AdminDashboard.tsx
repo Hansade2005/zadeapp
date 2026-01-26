@@ -42,7 +42,7 @@ export const AdminDashboard: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'content' | 'credits' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'orders' | 'content' | 'credits' | 'analytics'>('overview');
   const [stats, setStats] = useState<PlatformStats>({
     totalUsers: 0,
     totalProducts: 0,
@@ -54,6 +54,7 @@ export const AdminDashboard: React.FC = () => {
     pendingReviews: 0,
   });
   const [users, setUsers] = useState<User[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
@@ -90,6 +91,7 @@ export const AdminDashboard: React.FC = () => {
     if (isAuthenticated) {
       fetchPlatformStats();
       fetchUsers();
+      fetchOrders();
       fetchProducts();
       fetchJobs();
       fetchEvents();
@@ -124,16 +126,19 @@ export const AdminDashboard: React.FC = () => {
 
   const fetchPlatformStats = async () => {
     try {
-      const [usersRes, productsRes, jobsRes, eventsRes, ordersRes, boostsRes] = await Promise.all([
+      const [usersRes, productsRes, jobsRes, eventsRes, ordersRes, paidOrdersRes, boostsRes] = await Promise.all([
         supabase.from('users').select('id', { count: 'exact', head: true }),
         supabase.from('products').select('id', { count: 'exact', head: true }),
         supabase.from('jobs').select('id', { count: 'exact', head: true }),
         supabase.from('events').select('id', { count: 'exact', head: true }),
-        supabase.from('orders').select('id, total_price', { count: 'exact' }),
+        supabase.from('orders').select('id', { count: 'exact', head: true }),
+        // Only count PAID orders for revenue
+        supabase.from('orders').select('id, total_price').eq('payment_status', 'paid'),
         supabase.from('boost_purchases').select('id', { count: 'exact', head: true }).gte('boost_end_date', new Date().toISOString()),
       ]);
 
-      const totalRevenue = ordersRes.data?.reduce((sum, order) => sum + (order.total_price || 0), 0) || 0;
+      // Calculate revenue only from PAID orders
+      const totalRevenue = paidOrdersRes.data?.reduce((sum, order) => sum + (order.total_price || 0), 0) || 0;
 
       setStats({
         totalUsers: usersRes.count || 0,
@@ -191,6 +196,66 @@ export const AdminDashboard: React.FC = () => {
       setUsers(usersWithCredits);
     } catch (error) {
       console.error('Error fetching users:', error);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          buyer:users!orders_buyer_id_fkey(full_name, email),
+          seller:users!orders_seller_id_fkey(full_name, email),
+          product:products!orders_product_id_fkey(title, images)
+        `)
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        console.error('Error fetching orders:', error);
+        return;
+      }
+
+      setOrders(data || []);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast.success(`Order status updated to ${newStatus}`);
+      fetchOrders();
+      fetchPlatformStats();
+    } catch (error: any) {
+      console.error('Error updating order:', error);
+      toast.error(error.message || 'Failed to update order');
+    }
+  };
+
+  const updatePaymentStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ payment_status: newStatus, updated_at: new Date().toISOString() })
+        .eq('id', orderId);
+
+      if (error) throw error;
+
+      toast.success(`Payment status updated to ${newStatus}`);
+      fetchOrders();
+      fetchPlatformStats();
+    } catch (error: any) {
+      console.error('Error updating payment status:', error);
+      toast.error(error.message || 'Failed to update payment status');
     }
   };
 
@@ -326,13 +391,13 @@ export const AdminDashboard: React.FC = () => {
         date.setDate(date.getDate() - i);
         const dateStr = date.toISOString().split('T')[0];
 
-        // Get counts up to this date
+        // Get counts up to this date (only paid orders for revenue)
         const [users, products, jobs, events, revenue] = await Promise.all([
           supabase.from('users').select('id', { count: 'exact', head: true }).lte('created_at', `${dateStr}T23:59:59.999Z`),
           supabase.from('products').select('id', { count: 'exact', head: true }).lte('created_at', `${dateStr}T23:59:59.999Z`),
           supabase.from('jobs').select('id', { count: 'exact', head: true }).lte('created_at', `${dateStr}T23:59:59.999Z`),
           supabase.from('events').select('id', { count: 'exact', head: true }).lte('created_at', `${dateStr}T23:59:59.999Z`),
-          supabase.from('orders').select('total_price').lte('created_at', `${dateStr}T23:59:59.999Z`),
+          supabase.from('orders').select('total_price').eq('payment_status', 'paid').lte('created_at', `${dateStr}T23:59:59.999Z`),
         ]);
 
         const totalRevenue = revenue.data?.reduce((sum, order) => sum + (order.total_price || 0), 0) || 0;
@@ -700,7 +765,8 @@ export const AdminDashboard: React.FC = () => {
               {[
                 { id: 'overview', label: 'Overview', icon: TrendingUp },
                 { id: 'users', label: 'Users', icon: Users },
-                { id: 'content', label: 'Content', icon: Package },
+                { id: 'orders', label: 'Orders', icon: Package },
+                { id: 'content', label: 'Content', icon: Briefcase },
                 { id: 'credits', label: 'Credits', icon: DollarSign },
                 { id: 'analytics', label: 'Analytics', icon: TrendingUp },
               ].map((tab) => {
@@ -944,6 +1010,142 @@ export const AdminDashboard: React.FC = () => {
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Orders Tab */}
+          {activeTab === 'orders' && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-lg font-bold text-gray-900">Order Management</h2>
+                <p className="text-sm text-gray-600">View and manage all platform orders</p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyer</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seller</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {orders.length === 0 ? (
+                      <tr>
+                        <td colSpan={9} className="px-6 py-12 text-center text-gray-500">
+                          No orders found
+                        </td>
+                      </tr>
+                    ) : (
+                      orders.map((order) => {
+                        const product = Array.isArray(order.product) ? order.product[0] : order.product;
+                        const buyer = Array.isArray(order.buyer) ? order.buyer[0] : order.buyer;
+                        const seller = Array.isArray(order.seller) ? order.seller[0] : order.seller;
+
+                        return (
+                          <tr key={order.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-mono text-gray-900">
+                                {order.id?.slice(0, 8)}...
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                {product?.images?.[0] && (
+                                  <img
+                                    src={product.images[0]}
+                                    alt={product?.title || 'Product'}
+                                    className="h-10 w-10 rounded object-cover"
+                                  />
+                                )}
+                                <span className="text-sm font-medium text-gray-900">
+                                  {product?.title || 'Unknown Product'}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">{buyer?.full_name || 'Unknown'}</p>
+                                <p className="text-xs text-gray-500">{buyer?.email || ''}</p>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">{seller?.full_name || 'Unknown'}</p>
+                                <p className="text-xs text-gray-500">{seller?.email || ''}</p>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-bold text-gray-900">
+                                ${order.total_price?.toLocaleString() || '0'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <select
+                                value={order.status || 'pending'}
+                                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                                className={`text-xs px-2 py-1 rounded-full font-medium border-0 cursor-pointer ${
+                                  order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                  order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                                  order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                                  order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                              </select>
+                            </td>
+                            <td className="px-6 py-4">
+                              <select
+                                value={order.payment_status || 'pending'}
+                                onChange={(e) => updatePaymentStatus(order.id, e.target.value)}
+                                className={`text-xs px-2 py-1 rounded-full font-medium border-0 cursor-pointer ${
+                                  order.payment_status === 'paid' ? 'bg-green-100 text-green-800' :
+                                  order.payment_status === 'refunded' ? 'bg-purple-100 text-purple-800' :
+                                  order.payment_status === 'failed' ? 'bg-red-100 text-red-800' :
+                                  'bg-yellow-100 text-yellow-800'
+                                }`}
+                              >
+                                <option value="pending">Pending</option>
+                                <option value="paid">Paid</option>
+                                <option value="failed">Failed</option>
+                                <option value="refunded">Refunded</option>
+                              </select>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-600">
+                              {new Date(order.created_at).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => {
+                                    // View order details (could open a modal)
+                                    toast.info(`Order ID: ${order.id}`);
+                                  }}
+                                  className="text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                                >
+                                  <Eye className="h-3 w-3" />
+                                  View
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
