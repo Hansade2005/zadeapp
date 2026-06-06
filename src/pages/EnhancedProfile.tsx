@@ -153,16 +153,16 @@ export const ProfilePage: React.FC = () => {
     setUploading(true);
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-      const filePath = `avatars/${fileName}`;
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${user.id}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('public')
+        .from('user-avatars')
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage.from('public').getPublicUrl(filePath);
+      const { data: urlData } = supabase.storage.from('user-avatars').getPublicUrl(filePath);
 
       const { error: updateError } = await supabase
         .from('users')

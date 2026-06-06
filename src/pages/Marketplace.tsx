@@ -279,16 +279,23 @@ const Marketplace: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header onCartClick={() => setIsCartOpen(true)} />
 
       <main className="pb-20 md:pb-0">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold mb-4">{t.marketplace.title}</h1>
-              <p className="text-xl text-indigo-100">
+        <section className="relative overflow-hidden bg-gradient-mesh bg-clay-600 text-white py-16 sm:py-20">
+          <div className="absolute -top-24 -right-16 h-72 w-72 rounded-full bg-marigold-400/30 blur-3xl" />
+          <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto animate-fade-in">
+              <span className="inline-block mb-4 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur text-sm font-semibold tracking-wide text-marigold-100">
+                Zade Marketplace
+              </span>
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+                {t.marketplace.title}
+              </h1>
+              <p className="font-serif text-lg sm:text-xl text-clay-50/90">
                 {t.marketplace.searchPlaceholder}
               </p>
             </div>
@@ -296,30 +303,41 @@ const Marketplace: React.FC = () => {
         </section>
 
         {/* Filters */}
-        <section className="py-6">
+        <section className="relative -mt-10 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ProductFilterPanel onFilterChange={setFilters} showLocationFilter={true} />
           </div>
         </section>
 
         {/* View Controls */}
-        <section className="bg-white border-y border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">
-                {loading ? 'Loading...' : `${filteredProducts.length} products found`}
+        <section className="mt-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between border-b border-stone-200 pb-4">
+              <span className="text-sm font-medium text-stone-600">
+                {loading ? (
+                  'Loading...'
+                ) : (
+                  <>
+                    <span className="font-display text-lg font-bold text-stone-900">
+                      {filteredProducts.length}
+                    </span>{' '}
+                    products found
+                  </>
+                )}
               </span>
-              
-              <div className="flex items-center space-x-2">
+
+              <div className="flex items-center gap-1 p-1 bg-stone-100 rounded-xl">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded ${viewMode === 'grid' ? 'bg-indigo-100 text-indigo-600' : 'text-gray-400'}`}
+                  aria-label="Grid view"
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-card text-clay-600 shadow-sm' : 'text-stone-400 hover:text-stone-600'}`}
                 >
                   <Grid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded ${viewMode === 'list' ? 'bg-indigo-100 text-indigo-600' : 'text-gray-400'}`}
+                  aria-label="List view"
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-card text-clay-600 shadow-sm' : 'text-stone-400 hover:text-stone-600'}`}
                 >
                   <List className="w-4 h-4" />
                 </button>
@@ -334,16 +352,20 @@ const Marketplace: React.FC = () => {
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-lg p-4 animate-pulse">
-                    <div className="bg-gray-200 h-48 rounded mb-4"></div>
-                    <div className="bg-gray-200 h-4 rounded mb-2"></div>
-                    <div className="bg-gray-200 h-4 rounded w-2/3"></div>
+                  <div key={i} className="bg-card rounded-2xl p-4 border border-stone-200/70 animate-pulse">
+                    <div className="bg-stone-200 h-48 rounded-xl mb-4"></div>
+                    <div className="bg-stone-200 h-4 rounded mb-2"></div>
+                    <div className="bg-stone-200 h-4 rounded w-2/3"></div>
                   </div>
                 ))}
               </div>
             ) : filteredProducts.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No products found matching your filters</p>
+              <div className="text-center py-20 animate-fade-in">
+                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-clay-50 text-clay-500">
+                  <Grid className="h-9 w-9" />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-stone-900 mb-2">No products found</h3>
+                <p className="text-stone-500 text-base mb-6">Try adjusting your search or filters to see more results.</p>
                 <button
                   onClick={() =>
                     setFilters({
@@ -357,14 +379,14 @@ const Marketplace: React.FC = () => {
                       sortBy: 'newest',
                     })
                   }
-                  className="mt-4 text-blue-600 hover:text-blue-700 underline"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-clay-500 text-white font-semibold shadow-md shadow-clay-500/25 hover:bg-clay-600 transition-colors"
                 >
                   Clear all filters
                 </button>
               </div>
             ) : (
               <div
-                className={`grid gap-6 ${
+                className={`grid gap-6 animate-slide-up ${
                   viewMode === 'grid'
                     ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                     : 'grid-cols-1'
@@ -386,12 +408,12 @@ const Marketplace: React.FC = () => {
                       onToggleWishlist={handleToggleWishlist}
                     />
                     {product.is_boosted && (
-                      <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
-                        FEATURED
+                      <div className="absolute top-3 right-3 z-10 bg-marigold-400 text-marigold-950 text-xs font-bold uppercase tracking-wide px-2.5 py-1 rounded-full shadow-md shadow-marigold-500/30">
+                        Featured
                       </div>
                     )}
                     {product.distance && (
-                      <div className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                      <div className="absolute bottom-3 left-3 z-10 bg-emerald-600/90 backdrop-blur text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-md">
                         {product.distance.toFixed(1)}km away
                       </div>
                     )}

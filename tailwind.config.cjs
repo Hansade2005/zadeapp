@@ -60,19 +60,61 @@ module.exports = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
         },
-        // Remap indigo to violet for brand consistency
+        // Brand: Terracotta / clay (African-modern primary).
+        // Remaps every legacy `indigo-*` utility across the app to the new brand.
         indigo: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6',
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
-          950: '#2e1065',
+          50: '#fef5ef',
+          100: '#fde7d7',
+          200: '#facbae',
+          300: '#f6a47a',
+          400: '#f17544',
+          500: '#ec5a2a',
+          600: '#dd3f15',
+          700: '#b72d13',
+          800: '#922617',
+          900: '#762316',
+          950: '#400e08',
+        },
+        // Secondary: deep emerald (remaps legacy `purple-*` utilities).
+        purple: {
+          50: '#ecfdf5',
+          100: '#d1fae5',
+          200: '#a7f3d0',
+          300: '#6ee7b7',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+          700: '#047857',
+          800: '#065f46',
+          900: '#064e3b',
+          950: '#022c22',
+        },
+        // Terracotta brand alias (explicit usage in redesigned surfaces)
+        clay: {
+          50: '#fef5ef',
+          100: '#fde7d7',
+          200: '#facbae',
+          300: '#f6a47a',
+          400: '#f17544',
+          500: '#ec5a2a',
+          600: '#dd3f15',
+          700: '#b72d13',
+          800: '#922617',
+          900: '#762316',
+          950: '#400e08',
+        },
+        // Marigold accent for boost / highlights
+        marigold: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
         }
       },
       borderRadius: {
@@ -113,8 +155,7 @@ module.exports = {
 },
       fontFamily: {
         sans: [
-                "'Inter'",
-                "'Manrope'",
+                "'Plus Jakarta Sans'",
                 "ui-sans-serif",
                 "system-ui",
                 "-apple-system",
@@ -127,14 +168,14 @@ module.exports = {
                 "sans-serif"
         ],
         display: [
-                "'Manrope'",
-                "'Inter'",
+                "'Bricolage Grotesque'",
+                "'Plus Jakarta Sans'",
                 "ui-sans-serif",
                 "system-ui",
                 "sans-serif"
         ],
         serif: [
-                "'Lora'",
+                "'Fraunces'",
                 "ui-serif",
                 "Georgia",
                 "Cambria",

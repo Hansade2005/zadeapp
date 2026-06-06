@@ -1,130 +1,133 @@
-/* Modern Inter & Manrope fonts - loaded in index.html for performance */
+/* Fonts loaded in index.html: Bricolage Grotesque, Plus Jakarta Sans, Fraunces */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /*
- * ZadeApp Modern Design System
- * Primary: Violet/Indigo gradient (#8b5cf6 -> #6366f1)
- * Secondary: Teal accents (#14b8a6)
- * Neutral: Warm whites and slate grays
+ * Zade Design System — "Bold African-modern"
+ * Primary:   Terracotta / clay (#ec5a2a)  — warm, confident, marketplace-forward
+ * Secondary: Deep emerald (#059669)        — grounded, trustworthy
+ * Accent:    Marigold (#f59e0b)            — energy, highlights, boost
+ * Canvas:    Warm cream (#fbf7f1) on ink (#1f1813)
+ * Type:      Bricolage Grotesque (display) + Plus Jakarta Sans (body) + Fraunces (editorial)
  */
 
 @layer base {
   :root {
-    /* Modern violet-indigo primary */
-    --background: 0 0% 100%;
-    --foreground: 224 71% 4%;
+    /* Warm cream canvas + ink */
+    --background: 36 40% 97%;
+    --foreground: 20 24% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 224 71% 4%;
+    --card-foreground: 20 24% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71% 4%;
+    --popover-foreground: 20 24% 10%;
 
-    /* Primary - Violet */
-    --primary: 258 90% 66%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Terracotta */
+    --primary: 14 82% 54%;
+    --primary-foreground: 40 50% 98%;
 
-    /* Secondary - Slate */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 9% 46%;
+    /* Secondary - warm sand */
+    --secondary: 32 30% 92%;
+    --secondary-foreground: 20 20% 24%;
 
     /* Muted */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 32 24% 93%;
+    --muted-foreground: 24 9% 40%;
 
-    /* Accent - Teal */
-    --accent: 168 84% 39%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent - Emerald */
+    --accent: 160 84% 31%;
+    --accent-foreground: 40 50% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 258 90% 66%;
+    --border: 30 18% 87%;
+    --input: 30 18% 87%;
+    --ring: 14 82% 54%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 74% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Chart colors */
-    --chart-1: 258 90% 66%;
-    --chart-2: 168 84% 39%;
-    --chart-3: 262 83% 58%;
-    --chart-4: 199 89% 48%;
-    --chart-5: 43 96% 56%;
+    /* Chart colors — terracotta, emerald, marigold, indigo-clay, plum */
+    --chart-1: 14 82% 54%;
+    --chart-2: 160 84% 31%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 199 70% 42%;
+    --chart-5: 340 60% 50%;
 
     /* Sidebar */
-    --sidebar: 0 0% 98%;
-    --sidebar-foreground: 224 71% 4%;
-    --sidebar-primary: 258 90% 66%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 96%;
-    --sidebar-accent-foreground: 224 71% 4%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 258 90% 66%;
+    --sidebar: 34 36% 95%;
+    --sidebar-foreground: 20 24% 10%;
+    --sidebar-primary: 14 82% 54%;
+    --sidebar-primary-foreground: 40 50% 98%;
+    --sidebar-accent: 32 30% 90%;
+    --sidebar-accent-foreground: 20 24% 10%;
+    --sidebar-border: 30 18% 87%;
+    --sidebar-ring: 14 82% 54%;
 
     /* Font stacks */
-    --font-sans: 'Inter', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-display: 'Manrope', 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Fraunces', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
     /* Border radius */
-    --radius: 0.5rem;
+    --radius: 0.875rem;
 
-    /* Modern shadows with subtle violet tint */
-    --shadow-2xs: 0 1px 2px 0 rgb(139 92 246 / 0.03);
-    --shadow-xs: 0 1px 3px 0 rgb(139 92 246 / 0.04);
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
-    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.2);
+    /* Warm-tinted shadows */
+    --shadow-2xs: 0 1px 2px 0 rgb(120 50 20 / 0.04);
+    --shadow-xs: 0 1px 3px 0 rgb(120 50 20 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(60 30 15 / 0.08), 0 1px 2px -1px rgb(60 30 15 / 0.08);
+    --shadow: 0 1px 3px 0 rgb(60 30 15 / 0.1), 0 1px 2px -1px rgb(60 30 15 / 0.1);
+    --shadow-md: 0 4px 10px -2px rgb(60 30 15 / 0.1), 0 2px 4px -2px rgb(60 30 15 / 0.08);
+    --shadow-lg: 0 12px 28px -6px rgb(60 30 15 / 0.12), 0 4px 8px -4px rgb(60 30 15 / 0.08);
+    --shadow-xl: 0 24px 48px -12px rgb(60 30 15 / 0.16), 0 8px 16px -8px rgb(60 30 15 / 0.1);
+    --shadow-2xl: 0 32px 64px -16px rgb(40 20 10 / 0.28);
 
     --tracking-normal: -0.011em;
     --spacing: 0.25rem;
   }
 
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 20% 98%;
-    --card: 224 71% 8%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71% 8%;
-    --popover-foreground: 210 20% 98%;
+    /* Warm charcoal / espresso night theme */
+    --background: 20 18% 8%;
+    --foreground: 36 30% 95%;
+    --card: 20 16% 12%;
+    --card-foreground: 36 30% 95%;
+    --popover: 20 16% 12%;
+    --popover-foreground: 36 30% 95%;
 
-    --primary: 258 90% 66%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 14 86% 58%;
+    --primary-foreground: 20 24% 8%;
 
-    --secondary: 215 28% 17%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 22 14% 18%;
+    --secondary-foreground: 36 30% 95%;
 
-    --muted: 215 28% 17%;
-    --muted-foreground: 217 10% 64%;
+    --muted: 22 14% 18%;
+    --muted-foreground: 30 10% 64%;
 
-    --accent: 168 84% 39%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 160 70% 40%;
+    --accent-foreground: 20 24% 8%;
 
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 258 90% 66%;
+    --border: 22 12% 20%;
+    --input: 22 12% 20%;
+    --ring: 14 86% 58%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --chart-1: 258 90% 66%;
-    --chart-2: 168 84% 39%;
-    --chart-3: 262 83% 58%;
-    --chart-4: 199 89% 48%;
-    --chart-5: 43 96% 56%;
+    --chart-1: 14 86% 58%;
+    --chart-2: 160 70% 40%;
+    --chart-3: 38 92% 55%;
+    --chart-4: 199 70% 50%;
+    --chart-5: 340 60% 58%;
 
-    --sidebar: 224 71% 8%;
-    --sidebar-foreground: 210 20% 98%;
-    --sidebar-primary: 258 90% 66%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 28% 17%;
-    --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 215 28% 17%;
-    --sidebar-ring: 258 90% 66%;
+    --sidebar: 20 16% 11%;
+    --sidebar-foreground: 36 30% 95%;
+    --sidebar-primary: 14 86% 58%;
+    --sidebar-primary-foreground: 20 24% 8%;
+    --sidebar-accent: 22 14% 18%;
+    --sidebar-accent-foreground: 36 30% 95%;
+    --sidebar-border: 22 12% 20%;
+    --sidebar-ring: 14 86% 58%;
 
     --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-xs: 0 1px 3px 0 rgb(0 0 0 / 0.3);
@@ -154,11 +157,19 @@
     letter-spacing: -0.011em;
   }
 
+  /* Subtle warm paper grain on the canvas */
+  body {
+    background-image:
+      radial-gradient(at 18% -5%, hsl(14 82% 54% / 0.06) 0px, transparent 45%),
+      radial-gradient(at 92% 0%, hsl(160 84% 31% / 0.05) 0px, transparent 40%);
+    background-attachment: fixed;
+  }
+
   /* Typography improvements */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
 
   h1 {
@@ -175,65 +186,65 @@
 }
 
 @layer components {
-  /* Modern gradient buttons */
+  /* Terracotta sunset buttons */
   .btn-primary {
-    @apply bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium px-6 py-2.5 rounded-xl;
-    @apply hover:from-violet-700 hover:to-indigo-700 transition-all duration-200;
-    @apply shadow-lg shadow-violet-500/25 hover:shadow-xl hover:shadow-violet-500/30;
+    @apply bg-gradient-to-r from-clay-500 to-clay-600 text-white font-semibold px-6 py-2.5 rounded-xl;
+    @apply hover:from-clay-600 hover:to-clay-700 transition-all duration-200;
+    @apply shadow-lg shadow-clay-500/25 hover:shadow-xl hover:shadow-clay-500/30;
     @apply active:scale-[0.98];
   }
 
   .btn-secondary {
-    @apply bg-slate-100 text-slate-700 font-medium px-6 py-2.5 rounded-xl;
-    @apply hover:bg-slate-200 transition-all duration-200;
+    @apply bg-secondary text-secondary-foreground font-semibold px-6 py-2.5 rounded-xl;
+    @apply hover:bg-stone-200 transition-all duration-200;
     @apply active:scale-[0.98];
   }
 
   .btn-accent {
-    @apply bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium px-6 py-2.5 rounded-xl;
-    @apply hover:from-teal-600 hover:to-cyan-600 transition-all duration-200;
-    @apply shadow-lg shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-500/30;
+    @apply bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold px-6 py-2.5 rounded-xl;
+    @apply hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200;
+    @apply shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/30;
     @apply active:scale-[0.98];
   }
 
-  /* Modern card styles */
+  /* Card styles */
   .card-modern {
-    @apply bg-white rounded-2xl border border-slate-200/60;
+    @apply bg-card rounded-2xl border border-stone-200/70;
     @apply shadow-sm hover:shadow-lg transition-all duration-300;
-    @apply hover:border-slate-200;
+    @apply hover:border-clay-200;
   }
 
   .card-glass {
-    @apply bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20;
+    @apply bg-white/70 backdrop-blur-xl rounded-2xl border border-white/40;
     @apply shadow-xl;
   }
 
   /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-clay-600 via-clay-500 to-marigold-500 bg-clip-text text-transparent;
   }
 
   .gradient-text-accent {
-    @apply bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent;
   }
 
-  /* Modern input styles */
+  /* Input styles */
   .input-modern {
-    @apply w-full px-4 py-3 rounded-xl border border-slate-200;
-    @apply bg-slate-50/50 focus:bg-white;
-    @apply focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10;
+    @apply w-full px-4 py-3 rounded-xl border border-stone-200;
+    @apply bg-stone-50/60 focus:bg-white;
+    @apply focus:border-clay-500 focus:ring-4 focus:ring-clay-500/10;
     @apply transition-all duration-200 outline-none;
   }
 
   /* Badge styles */
   .badge-violet {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
-    @apply bg-violet-100 text-violet-700;
+    @apply bg-clay-100 text-clay-700;
   }
 
   .badge-teal {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
-    @apply bg-teal-100 text-teal-700;
+    @apply bg-emerald-100 text-emerald-700;
   }
 }
 
@@ -283,28 +294,38 @@
 
   /* Glow effects */
   .glow-violet {
-    box-shadow: 0 0 40px -10px rgb(139 92 246 / 0.5);
+    box-shadow: 0 0 40px -10px rgb(236 90 42 / 0.5);
   }
 
   .glow-teal {
-    box-shadow: 0 0 40px -10px rgb(20 184 166 / 0.5);
+    box-shadow: 0 0 40px -10px rgb(5 150 105 / 0.5);
   }
 
   /* Gradient backgrounds */
   .bg-gradient-violet {
-    @apply bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700;
+    @apply bg-gradient-to-br from-clay-500 via-clay-600 to-clay-700;
   }
 
   .bg-gradient-teal {
-    @apply bg-gradient-to-br from-teal-500 via-cyan-500 to-teal-600;
+    @apply bg-gradient-to-br from-emerald-600 via-emerald-600 to-emerald-700;
   }
 
   .bg-gradient-mesh {
     background:
-      radial-gradient(at 40% 20%, rgb(139 92 246 / 0.1) 0px, transparent 50%),
-      radial-gradient(at 80% 0%, rgb(99 102 241 / 0.1) 0px, transparent 50%),
-      radial-gradient(at 0% 50%, rgb(20 184 166 / 0.08) 0px, transparent 50%),
-      radial-gradient(at 80% 50%, rgb(139 92 246 / 0.08) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgb(99 102 241 / 0.1) 0px, transparent 50%);
+      radial-gradient(at 40% 20%, rgb(236 90 42 / 0.12) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgb(245 158 11 / 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgb(5 150 105 / 0.08) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgb(236 90 42 / 0.08) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgb(5 150 105 / 0.1) 0px, transparent 50%);
+  }
+
+  /* Decorative Adire / kente-inspired motif divider */
+  .motif-band {
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(14 82% 54% / 0.9) 0 10px,
+      hsl(38 92% 50% / 0.9) 10px 20px,
+      hsl(160 84% 31% / 0.9) 20px 30px
+    );
   }
 }

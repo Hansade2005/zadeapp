@@ -55,35 +55,41 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="hidden md:block bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="hidden md:block bg-stone-950 text-white relative overflow-hidden">
+      <div className="motif-band h-1.5 w-full" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-clay-600/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-emerald-600/10 blur-3xl pointer-events-none" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center mb-4">
+            <Link to="/" className="group flex items-center gap-2.5 mb-4">
               <img
                 src="/logo.svg"
                 alt="ZadeApp Logo"
-                className="h-8 w-auto"
+                className="h-8 w-auto transition-transform duration-300 group-hover:scale-105"
               />
+              <span className="font-display font-extrabold text-2xl tracking-tight gradient-text leading-none">
+                Zade
+              </span>
             </Link>
-            <p className="text-gray-400 mb-6 max-w-md text-sm leading-relaxed">
+            <p className="text-stone-400 mb-6 max-w-md text-sm leading-relaxed">
               {t.footer.description}
             </p>
 
             {/* Contact Info */}
-            <div className="space-y-3 text-sm text-gray-400">
+            <div className="space-y-3 text-sm text-stone-400">
               <div className="flex items-center space-x-3">
-                <MapPin className="w-4 h-4 text-indigo-400" />
+                <MapPin className="w-4 h-4 text-clay-400" />
                 <span>Toronto, Canada</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="w-4 h-4 text-indigo-400" />
+                <Phone className="w-4 h-4 text-clay-400" />
                 <span>{t.footer.supportPhone}</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="w-4 h-4 text-indigo-400" />
+                <Mail className="w-4 h-4 text-clay-400" />
                 <span>{t.footer.supportEmail}</span>
               </div>
             </div>
@@ -91,24 +97,24 @@ const Footer: React.FC = () => {
             {/* Language Switcher */}
             <div className="mt-6">
               <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-gray-400" />
-                <div className="flex bg-gray-800 rounded-lg p-1">
+                <Globe className="w-4 h-4 text-stone-400" />
+                <div className="flex bg-stone-800/80 rounded-xl p-1 border border-white/5">
                   <button
                     onClick={() => setLanguage('en')}
-                    className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                    className={`px-3 py-1 text-xs font-semibold rounded-lg transition-colors ${
                       language === 'en'
-                        ? 'bg-indigo-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-clay-600 text-white shadow-sm'
+                        : 'text-stone-400 hover:text-white'
                     }`}
                   >
                     EN
                   </button>
                   <button
                     onClick={() => setLanguage('fr')}
-                    className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                    className={`px-3 py-1 text-xs font-semibold rounded-lg transition-colors ${
                       language === 'fr'
-                        ? 'bg-indigo-600 text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-clay-600 text-white shadow-sm'
+                        : 'text-stone-400 hover:text-white'
                     }`}
                   >
                     FR
@@ -121,13 +127,13 @@ const Footer: React.FC = () => {
           {/* Footer Links */}
           {footerSections.map((section) => (
             <div key={section.title}>
-              <h3 className="font-semibold mb-4 text-white">{section.title}</h3>
-              <ul className="space-y-2">
+              <h3 className="font-display font-bold mb-4 text-white tracking-tight">{section.title}</h3>
+              <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="text-gray-400 hover:text-indigo-400 transition-colors duration-200 text-sm"
+                      className="inline-block text-stone-400 hover:text-clay-400 hover:translate-x-1 transition-all duration-200 text-sm"
                     >
                       {link.name}
                     </Link>
@@ -139,28 +145,28 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Footer */}
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between">
+        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between">
           <div className="flex flex-wrap items-center gap-6 mb-4 md:mb-0">
-            <Link to="/privacy" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">
+            <Link to="/privacy" className="text-stone-400 hover:text-clay-400 text-sm transition-colors">
               {t.footer.privacyPolicy}
             </Link>
-            <Link to="/terms" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">
+            <Link to="/terms" className="text-stone-400 hover:text-clay-400 text-sm transition-colors">
               {t.footer.termsOfService}
             </Link>
-            <Link to="/cookies" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">
+            <Link to="/cookies" className="text-stone-400 hover:text-clay-400 text-sm transition-colors">
               {t.footer.cookiePolicy}
             </Link>
           </div>
 
           {/* Social Links */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {socialLinks.map((social) => (
               <a
                 key={social.label}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-indigo-400 transition-colors duration-200 p-2 hover:bg-gray-800 rounded-lg"
+                className="text-stone-400 hover:text-white transition-all duration-200 p-2.5 bg-white/5 hover:bg-clay-600 rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-clay-600/30"
                 aria-label={social.label}
               >
                 <social.icon className="w-5 h-5" />
@@ -170,9 +176,9 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="text-center mt-8 pt-8 border-t border-gray-800">
-          <p className="text-gray-400 text-sm">
-            {t.footer.copyright} {t.footer.madeWith} <Heart className="inline w-4 h-4 text-red-500 mx-1" /> {t.footer.inCanada}
+        <div className="text-center mt-8 pt-8 border-t border-white/10">
+          <p className="text-stone-400 text-sm">
+            {t.footer.copyright} {t.footer.madeWith} <Heart className="inline w-4 h-4 text-clay-500 mx-1 fill-clay-500" /> {t.footer.inCanada}
           </p>
         </div>
       </div>
