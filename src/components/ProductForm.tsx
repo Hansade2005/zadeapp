@@ -86,10 +86,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
     const uploadedUrls: string[] = [];
 
     try {
+      if (!user?.id) {
+        throw new Error('You must be signed in to upload images');
+      }
+
       for (const file of Array.from(files)) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
-        const filePath = `${user?.id}/${fileName}`;
+        const filePath = `${user.id}/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('product-images')
