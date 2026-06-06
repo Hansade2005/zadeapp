@@ -100,49 +100,51 @@ const ProfileDropdown: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-2 text-gray-700 hover:text-indigo-600 transition-colors rounded-lg hover:bg-gray-50"
+        className="flex items-center space-x-2 p-1.5 pr-2.5 text-stone-700 hover:text-clay-700 transition-all duration-200 rounded-2xl hover:bg-clay-50 ring-1 ring-transparent hover:ring-clay-200/60"
       >
-        <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-          <User className="w-4 h-4 text-indigo-600" />
+        <div className="w-8 h-8 bg-gradient-to-br from-clay-500 to-marigold-400 rounded-full flex items-center justify-center shadow-sm shadow-clay-500/30">
+          <User className="w-4 h-4 text-white" />
         </div>
-        <span className="hidden md:block text-sm font-medium">
+        <span className="hidden md:block text-sm font-semibold">
           {user.user_metadata?.full_name || user.email?.split('@')[0]}
         </span>
-        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+        <div className="absolute right-0 mt-2 w-60 bg-background rounded-2xl shadow-lg shadow-clay-900/10 border border-clay-200/60 py-2 z-50 overflow-hidden animate-slide-up">
+          <div className="motif-band h-1 w-full -mt-2 mb-2" />
           {/* User Info */}
-          <div className="px-4 py-3 border-b border-gray-100">
-            <p className="text-sm font-medium text-gray-900">
+          <div className="px-4 py-3 border-b border-clay-100/80">
+            <p className="text-sm font-bold text-stone-900 font-display">
               {user.user_metadata?.full_name || 'User'}
             </p>
-            <p className="text-xs text-gray-500 truncate">
+            <p className="text-xs text-stone-500 truncate">
               {user.email}
             </p>
           </div>
 
           {/* Menu Items */}
-          <div className="py-1">
+          <div className="py-1 max-h-[60vh] overflow-y-auto">
             {menuItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-600 transition-colors"
+                className="group flex items-center mx-1.5 px-3 py-2 rounded-xl text-sm text-stone-700 hover:bg-clay-50 hover:text-clay-700 transition-colors"
               >
-                <item.icon className="w-4 h-4 mr-3" />
+                <item.icon className="w-4 h-4 mr-3 text-stone-400 group-hover:text-clay-500 transition-colors" />
                 {item.label}
               </Link>
             ))}
           </div>
 
           {/* Sign Out */}
-          <div className="border-t border-gray-100 pt-1">
+          <div className="border-t border-clay-100/80 pt-1 mt-1">
             <button
               onClick={handleSignOut}
-              className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+              className="group flex items-center w-full mx-1.5 px-3 py-2 rounded-xl text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+              style={{ width: 'calc(100% - 0.75rem)' }}
             >
               <LogOut className="w-4 h-4 mr-3" />
               Sign Out

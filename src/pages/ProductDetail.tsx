@@ -259,8 +259,8 @@ const ProductDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-clay-500"></div>
       </div>
     );
   }
@@ -270,32 +270,32 @@ const ProductDetail: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header onCartClick={() => setIsCartOpen(true)} />
 
       <main className="pb-20 md:pb-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-            <Link to="/" className="hover:text-indigo-600">
+          <div className="flex items-center gap-2 text-sm text-stone-500 mb-6">
+            <Link to="/" className="hover:text-clay-600 transition-colors">
               Home
             </Link>
-            <span>/</span>
-            <Link to="/marketplace" className="hover:text-indigo-600">
+            <span className="text-stone-300">/</span>
+            <Link to="/marketplace" className="hover:text-clay-600 transition-colors">
               Marketplace
             </Link>
-            <span>/</span>
-            <span className="text-gray-900">{product.title}</span>
+            <span className="text-stone-300">/</span>
+            <span className="text-stone-900 font-medium truncate max-w-[200px]">{product.title}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {/* Image Gallery */}
-            <div>
-              <div className="relative bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-4">
+            <div className="lg:sticky lg:top-24 lg:self-start">
+              <div className="relative bg-card rounded-2xl shadow-lg shadow-stone-900/5 border border-stone-200/70 overflow-hidden mb-4 group">
                 <img
                   src={product.images[currentImageIndex] || '/placeholder.png'}
                   alt={product.title}
-                  className="w-full h-96 object-contain"
+                  className="w-full h-96 object-contain p-6 transition-transform duration-500 group-hover:scale-[1.03]"
                 />
 
                 {product.images.length > 1 && (
@@ -303,22 +303,22 @@ const ProductDetail: React.FC = () => {
                     <button
                       onClick={prevImage}
                       disabled={currentImageIndex === 0}
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-opacity-100"
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-card/90 backdrop-blur p-2.5 rounded-full shadow-lg shadow-stone-900/10 text-stone-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-clay-500 hover:text-white transition-colors"
                     >
-                      <ChevronLeft className="h-6 w-6" />
+                      <ChevronLeft className="h-5 w-5" />
                     </button>
                     <button
                       onClick={nextImage}
                       disabled={currentImageIndex === product.images.length - 1}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 p-2 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-opacity-100"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-card/90 backdrop-blur p-2.5 rounded-full shadow-lg shadow-stone-900/10 text-stone-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-clay-500 hover:text-white transition-colors"
                     >
-                      <ChevronRight className="h-6 w-6" />
+                      <ChevronRight className="h-5 w-5" />
                     </button>
                   </>
                 )}
 
                 {product.discount_percentage > 0 && (
-                  <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full font-bold">
+                  <div className="absolute top-4 left-4 bg-clay-500 text-white px-3 py-1.5 rounded-full font-bold text-sm shadow-md shadow-clay-500/30">
                     {product.discount_percentage}% OFF
                   </div>
                 )}
@@ -326,13 +326,15 @@ const ProductDetail: React.FC = () => {
 
               {/* Thumbnail Gallery */}
               {product.images.length > 1 && (
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-2.5">
                   {product.images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`border-2 rounded-lg overflow-hidden ${
-                        currentImageIndex === index ? 'border-indigo-600' : 'border-gray-200'
+                      className={`border-2 rounded-xl overflow-hidden transition-all ${
+                        currentImageIndex === index
+                          ? 'border-clay-500 ring-2 ring-clay-500/20'
+                          : 'border-stone-200 hover:border-clay-300'
                       }`}
                     >
                       <img src={image} alt={`${product.title} ${index + 1}`} className="w-full h-20 object-cover" />

@@ -231,66 +231,103 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header onCartClick={() => setIsCartOpen(true)} />
 
       <main className="pb-20 md:pb-0">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        <section className="relative overflow-hidden bg-stone-950 text-white">
+          <div className="absolute inset-0 bg-gradient-mesh opacity-90"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-stone-950 via-clay-950/80 to-stone-950"></div>
+          {/* Decorative floating shapes */}
+          <div className="pointer-events-none absolute -top-24 -right-16 w-96 h-96 rounded-full bg-clay-500/30 blur-3xl"></div>
+          <div className="pointer-events-none absolute bottom-0 -left-24 w-80 h-80 rounded-full bg-marigold-500/20 blur-3xl"></div>
+
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              <div className="lg:col-span-7">
+                <span
+                  className="animate-fade-in inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 backdrop-blur-sm text-marigold-200 text-sm font-medium mb-8"
+                  style={{ animationDelay: '0ms' }}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Africa&apos;s boldest marketplace
+                </span>
+                <h1
+                  className="animate-slide-up font-display text-5xl md:text-7xl font-extrabold leading-[0.95] tracking-tight mb-6"
+                  style={{ animationDelay: '80ms' }}
+                >
                   {t.home.heroTitle}
+                  <span className="block font-serif italic font-normal text-marigold-300 mt-3 text-4xl md:text-6xl">
+                    built for everyone.
+                  </span>
                 </h1>
-                <p className="text-xl mb-8 text-gray-200">
+                <p
+                  className="animate-slide-up text-lg md:text-xl mb-10 text-stone-200/90 max-w-xl leading-relaxed"
+                  style={{ animationDelay: '160ms' }}
+                >
                   {t.home.heroSubtitle}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div
+                  className="animate-slide-up flex flex-col sm:flex-row gap-4"
+                  style={{ animationDelay: '240ms' }}
+                >
                   <Link
                     to="/marketplace"
-                    className="bg-white text-indigo-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center"
+                    className="group bg-clay-500 text-white px-8 py-4 rounded-xl font-semibold shadow-lg shadow-clay-900/40 hover:bg-clay-400 hover:-translate-y-0.5 transition-all flex items-center justify-center"
                   >
                     {t.home.exploreMarketplace}
-                    <ArrowRight className="ml-2 w-5 h-5" />
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link
                     to="/jobs"
-                    className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-indigo-900 transition-colors flex items-center justify-center"
+                    className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-stone-900 transition-colors flex items-center justify-center"
                   >
                     {t.home.findJobs}
                   </Link>
                 </div>
               </div>
               <div
-                className="relative"
+                className="lg:col-span-5 relative animate-scale-in"
+                style={{ animationDelay: '320ms' }}
               >
+                <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-tr from-clay-500/40 to-marigold-400/40 blur-2xl"></div>
                 <img
                   src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600"
                   alt="Canadian marketplace"
-                  className="rounded-2xl shadow-2xl"
+                  className="relative rounded-[2rem] shadow-2xl ring-1 ring-white/10 rotate-2 hover:rotate-0 transition-transform duration-500"
                 />
+                <div className="absolute -bottom-6 -left-6 bg-background text-stone-900 rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 rotate-[-3deg]">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-emerald-600 fill-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="font-display font-bold leading-none">Trusted vendors</div>
+                    <div className="text-xs text-stone-500">across the continent</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          {/* curved divider */}
+          <div className="motif-band h-3 w-full"></div>
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 bg-white">
+        <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat, index) => (
                 <div
                   key={stat.label}
-
-                  className="text-center"
+                  className="animate-slide-up text-center bg-white rounded-2xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow p-6"
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-lg mb-4">
-                    <stat.icon className="w-6 h-6 text-indigo-600" />
+                  <div className="inline-flex items-center justify-center w-14 h-14 bg-clay-100 rounded-2xl mb-4">
+                    <stat.icon className="w-7 h-7 text-clay-600" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                  <div className="text-gray-600">{stat.label}</div>
+                  <div className="font-display text-4xl font-extrabold text-stone-900 mb-1">{stat.value}</div>
+                  <div className="text-stone-500">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -298,26 +335,27 @@ const Home: React.FC = () => {
         </section>
 
         {/* Categories Section */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-20 bg-stone-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Shop by Category</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+            <div className="max-w-2xl mb-14">
+              <p className="font-serif italic text-clay-600 text-lg mb-2">A whole continent of choice</p>
+              <h2 className="font-display text-4xl md:text-5xl font-extrabold text-stone-900 mb-4">Shop by Category</h2>
+              <p className="text-stone-600">
                 Discover thousands of products from trusted Canadian vendors across all categories
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
               {categories.map((category, index) => (
                 <div
                   key={category.name}
-
-                  className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+                  className="animate-scale-in bg-white p-6 rounded-2xl border border-stone-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group"
+                  style={{ animationDelay: `${index * 60}ms` }}
                 >
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                    <category.icon className="w-12 h-12 text-indigo-600" />
+                  <div className="mb-4 inline-flex p-3 rounded-xl bg-marigold-100 group-hover:bg-clay-100 transition-colors">
+                    <category.icon className="w-8 h-8 text-clay-600 group-hover:scale-110 transition-transform" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{category.name}</h3>
-                  <p className="text-sm text-gray-500">{category.count} items</p>
+                  <h3 className="font-display font-bold text-stone-900 mb-1">{category.name}</h3>
+                  <p className="text-sm text-stone-500">{category.count} items</p>
                 </div>
               ))}
             </div>
@@ -325,19 +363,20 @@ const Home: React.FC = () => {
         </section>
 
         {/* Featured Products */}
-        <section className="py-16 bg-white">
+        <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex flex-wrap items-end justify-between gap-4 mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">{t.home.featuredProducts}</h2>
-                <p className="text-gray-600">{t.home.heroSubtitle}</p>
+                <p className="font-serif italic text-clay-600 text-lg mb-2">Hand-picked for you</p>
+                <h2 className="font-display text-4xl md:text-5xl font-extrabold text-stone-900 mb-3">{t.home.featuredProducts}</h2>
+                <p className="text-stone-600 max-w-lg">{t.home.heroSubtitle}</p>
               </div>
               <Link
                 to="/marketplace"
-                className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
+                className="group text-clay-600 hover:text-clay-700 font-semibold flex items-center"
               >
                 {t.home.viewAll}
-                <ArrowRight className="ml-1 w-4 h-4" />
+                <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -357,6 +396,8 @@ const Home: React.FC = () => {
                 featuredProducts.map((product, index) => (
                   <div
                     key={product.id}
+                    className="animate-slide-up"
+                    style={{ animationDelay: `${index * 80}ms` }}
                   >
                     <ProductCard
                       {...product}
@@ -371,22 +412,24 @@ const Home: React.FC = () => {
 
         {/* Boosted Products */}
         {boostedProducts.length > 0 && (
-          <section className="py-16 bg-gradient-to-r from-yellow-50 to-orange-50">
+          <section className="py-20 bg-gradient-to-br from-marigold-50 via-background to-clay-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between mb-12">
+              <div className="flex flex-wrap items-end justify-between gap-4 mb-12">
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center">
-                    <TrendingUp className="w-8 h-8 text-yellow-600 mr-3" />
+                  <h2 className="font-display text-4xl md:text-5xl font-extrabold text-stone-900 mb-3 flex items-center">
+                    <span className="inline-flex p-2.5 rounded-xl bg-marigold-200 mr-4">
+                      <TrendingUp className="w-7 h-7 text-clay-600" />
+                    </span>
                     Boosted Products
                   </h2>
-                  <p className="text-gray-600">Premium listings with enhanced visibility</p>
+                  <p className="text-stone-600">Premium listings with enhanced visibility</p>
                 </div>
                 <Link
                   to="/marketplace"
-                  className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
+                  className="group text-clay-600 hover:text-clay-700 font-semibold flex items-center"
                 >
                   {t.home.viewAll}
-                  <ArrowRight className="ml-1 w-4 h-4" />
+                  <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -406,10 +449,11 @@ const Home: React.FC = () => {
                   boostedProducts.map((product, index) => (
                     <div
                       key={product.id}
-                      className="relative"
+                      className="relative animate-slide-up"
+                      style={{ animationDelay: `${index * 80}ms` }}
                     >
                       {/* Boost Badge */}
-                      <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                      <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-marigold-400 to-clay-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
                         ⭐ BOOSTED
                       </div>
                       <ProductCard
@@ -425,76 +469,114 @@ const Home: React.FC = () => {
         )}
 
         {/* Services Overview */}
-        <section className="py-16 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <section className="py-24 bg-stone-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">More Than Just Shopping</h2>
-              <p className="text-indigo-100 max-w-2xl mx-auto">
-                ZadeApp connects you to opportunities, events, and services across Canada
+            <div className="max-w-2xl mb-16">
+              <p className="font-serif italic text-clay-600 text-lg mb-2">Beyond the marketplace</p>
+              <h2 className="font-display text-4xl md:text-5xl font-extrabold text-stone-900 mb-4">More Than Just Shopping</h2>
+              <p className="text-stone-600">
+                ZadeApp connects you to opportunities, events, and services across the continent
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div
-
-                className="text-center"
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link
+                to="/jobs"
+                className="animate-slide-up group relative overflow-hidden rounded-3xl bg-stone-900 text-white p-8 min-h-[18rem] flex flex-col justify-between hover:-translate-y-1 transition-transform"
+                style={{ animationDelay: '0ms' }}
               >
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Briefcase className="w-8 h-8" />
+                <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-clay-500/30 blur-2xl group-hover:bg-clay-500/50 transition-colors"></div>
+                <div className="relative w-14 h-14 bg-clay-500 rounded-2xl flex items-center justify-center">
+                  <Briefcase className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">Find Your Dream Job</h3>
-                <p className="text-indigo-100 mb-6">
-                  Browse thousands of job opportunities from top Canadian companies
-                </p>
-                <Link
-                  to="/jobs"
-                  className="inline-flex items-center text-white hover:text-indigo-200 font-medium"
-                >
-                  Explore Jobs
-                  <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
-              </div>
+                <div className="relative">
+                  <h3 className="font-display text-2xl font-bold mb-3">Find Your Dream Job</h3>
+                  <p className="text-stone-300 mb-5">
+                    Browse thousands of job opportunities from top companies
+                  </p>
+                  <span className="inline-flex items-center text-marigold-300 font-semibold">
+                    Explore Jobs
+                    <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
 
-              <div
-
-                className="text-center"
+              <Link
+                to="/events"
+                className="animate-slide-up group relative overflow-hidden rounded-3xl bg-emerald-700 text-white p-8 min-h-[18rem] flex flex-col justify-between hover:-translate-y-1 transition-transform"
+                style={{ animationDelay: '120ms' }}
               >
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Calendar className="w-8 h-8" />
+                <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-emerald-400/30 blur-2xl group-hover:bg-emerald-400/50 transition-colors"></div>
+                <div className="relative w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center">
+                  <Calendar className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">Discover Events</h3>
-                <p className="text-indigo-100 mb-6">
-                  Join exciting events, conferences, and networking opportunities
-                </p>
-                <Link
-                  to="/events"
-                  className="inline-flex items-center text-white hover:text-indigo-200 font-medium"
-                >
-                  Browse Events
-                  <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
-              </div>
+                <div className="relative">
+                  <h3 className="font-display text-2xl font-bold mb-3">Discover Events</h3>
+                  <p className="text-emerald-50/90 mb-5">
+                    Join exciting events, conferences, and networking opportunities
+                  </p>
+                  <span className="inline-flex items-center text-marigold-200 font-semibold">
+                    Browse Events
+                    <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
 
-              <div
-
-                className="text-center"
+              <Link
+                to="/freelance"
+                className="animate-slide-up group relative overflow-hidden rounded-3xl bg-marigold-500 text-stone-900 p-8 min-h-[18rem] flex flex-col justify-between hover:-translate-y-1 transition-transform"
+                style={{ animationDelay: '240ms' }}
               >
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8" />
+                <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/30 blur-2xl group-hover:bg-white/50 transition-colors"></div>
+                <div className="relative w-14 h-14 bg-stone-900 rounded-2xl flex items-center justify-center text-white">
+                  <Users className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">Hire Freelancers</h3>
-                <p className="text-indigo-100 mb-6">
-                  Connect with skilled professionals for your projects and business needs
-                </p>
-                <Link
-                  to="/freelance"
-                  className="inline-flex items-center text-white hover:text-indigo-200 font-medium"
-                >
-                  Find Talent
-                  <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
-              </div>
+                <div className="relative">
+                  <h3 className="font-display text-2xl font-bold mb-3">Hire Freelancers</h3>
+                  <p className="text-stone-800 mb-5">
+                    Connect with skilled professionals for your projects and business needs
+                  </p>
+                  <span className="inline-flex items-center text-clay-700 font-semibold">
+                    Find Talent
+                    <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
             </div>
           </div>
+        </section>
+
+        {/* Footer CTA Band */}
+        <section className="relative overflow-hidden bg-stone-950 text-white">
+          <div className="absolute inset-0 bg-gradient-mesh opacity-90"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-clay-950/70 via-stone-950 to-emerald-950/60"></div>
+          <div className="pointer-events-none absolute -top-24 left-1/3 w-96 h-96 rounded-full bg-clay-500/30 blur-3xl"></div>
+          <div className="motif-band h-3 w-full"></div>
+          <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+            <p className="animate-fade-in font-serif italic text-marigold-300 text-lg mb-4">Your continent. Your marketplace.</p>
+            <h2 className="animate-slide-up font-display text-4xl md:text-6xl font-extrabold leading-[0.95] tracking-tight mb-6" style={{ animationDelay: '80ms' }}>
+              Ready to start
+              <span className="block gradient-text font-serif italic font-normal mt-2">your Zade journey?</span>
+            </h2>
+            <p className="animate-slide-up text-lg text-stone-200/90 max-w-2xl mx-auto mb-10" style={{ animationDelay: '160ms' }}>
+              {t.home.heroSubtitle}
+            </p>
+            <div className="animate-slide-up flex flex-col sm:flex-row gap-4 justify-center" style={{ animationDelay: '240ms' }}>
+              <Link
+                to="/marketplace"
+                className="group bg-clay-500 text-white px-8 py-4 rounded-xl font-semibold shadow-lg shadow-clay-900/40 hover:bg-clay-400 hover:-translate-y-0.5 transition-all flex items-center justify-center"
+              >
+                {t.home.exploreMarketplace}
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/jobs"
+                className="border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-stone-900 transition-colors flex items-center justify-center"
+              >
+                {t.home.findJobs}
+              </Link>
+            </div>
+          </div>
+          <div className="motif-band h-3 w-full"></div>
         </section>
 
       </main>
