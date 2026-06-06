@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TrendingUp, X, Zap, Clock, CheckCircle, CreditCard } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
@@ -52,6 +53,7 @@ export const BoostManager: React.FC<BoostManagerProps> = ({
   onBoostSuccess,
 }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [userCredits, setUserCredits] = useState(0);
   const [loadingCredits, setLoadingCredits] = useState(true);
@@ -241,7 +243,14 @@ export const BoostManager: React.FC<BoostManagerProps> = ({
                   {loadingCredits ? '...' : `${userCredits} Credits`}
                 </p>
               </div>
-              <button className="text-sm text-blue-600 hover:text-blue-700 underline flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  navigate('/my-credits');
+                }}
+                className="text-sm text-blue-600 hover:text-blue-700 underline flex items-center gap-1"
+              >
                 <CreditCard className="h-4 w-4" />
                 Buy More Credits
               </button>

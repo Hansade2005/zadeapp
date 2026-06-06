@@ -101,17 +101,17 @@ const EventForm: React.FC<EventFormProps> = ({
 
       for (const file of Array.from(files)) {
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `event-images/${fileName}`;
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+        const filePath = `${user?.id}/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('images')
-          .upload(filePath, file);
+          .from('event-images')
+          .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
         if (uploadError) throw uploadError;
 
         const { data } = supabase.storage
-          .from('images')
+          .from('event-images')
           .getPublicUrl(filePath);
 
         uploadedUrls.push(data.publicUrl);
