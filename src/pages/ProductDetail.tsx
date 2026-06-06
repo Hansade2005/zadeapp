@@ -346,26 +346,26 @@ const ProductDetail: React.FC = () => {
 
             {/* Product Info */}
             <div>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-card rounded-2xl shadow-lg shadow-stone-900/5 border border-stone-200/70 p-6 sm:p-8 animate-slide-up">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+                    <span className="px-3 py-1 bg-clay-50 text-clay-700 rounded-full text-sm font-semibold">
                       {product.category}
                     </span>
                   </div>
                   <div className="flex gap-2">
                     <button
                       onClick={shareProduct}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                      className="p-2.5 border border-stone-200 rounded-xl text-stone-600 hover:border-clay-300 hover:text-clay-600 transition-colors"
                     >
-                      <Share2 className="h-5 w-5 text-gray-600" />
+                      <Share2 className="h-5 w-5" />
                     </button>
                     <button
                       onClick={toggleWishlist}
-                      className={`p-2 border rounded-lg ${
+                      className={`p-2.5 border rounded-xl transition-colors ${
                         isWishlisted
-                          ? 'bg-red-50 border-red-300 text-red-600'
-                          : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                          ? 'bg-clay-50 border-clay-300 text-clay-600'
+                          : 'border-stone-200 text-stone-600 hover:border-clay-300 hover:text-clay-600'
                       }`}
                     >
                       <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-current' : ''}`} />
@@ -373,43 +373,63 @@ const ProductDetail: React.FC = () => {
                   </div>
                 </div>
 
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
+                <h1 className="font-display text-3xl sm:text-4xl font-bold text-stone-900 mb-4 leading-tight">{product.title}</h1>
 
-                <div className="flex items-center gap-4 mb-6">
+                {reviewCount > 0 && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-4 w-4 ${
+                            i < Math.round(averageRating)
+                              ? 'fill-marigold-400 text-marigold-400'
+                              : 'text-stone-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium text-stone-600">
+                      {averageRating.toFixed(1)} ({reviewCount} reviews)
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-end gap-4 mb-6">
+                  <span className="font-display text-4xl sm:text-5xl font-bold gradient-text">
+                    ${discountedPrice?.toLocaleString()}
+                  </span>
                   {product.discount_percentage > 0 && (
-                    <span className="text-2xl text-gray-400 line-through">
+                    <span className="text-xl text-stone-400 line-through mb-1">
                       ${product.price.toLocaleString()}
                     </span>
                   )}
-                  <span className="text-4xl font-bold text-indigo-600">
-                    ${discountedPrice?.toLocaleString()}
-                  </span>
                 </div>
 
-                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-200">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-6 pb-6 border-b border-stone-200">
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-gray-400" />
-                    <span className="text-gray-600">{product.location}</span>
+                    <MapPin className="h-5 w-5 text-clay-500" />
+                    <span className="text-stone-600">{product.location}</span>
                   </div>
                   {product.stock_quantity !== null && (
                     <div className="flex items-center gap-2">
-                      <Package className="h-5 w-5 text-gray-400" />
-                      <span className="text-gray-600">{product.stock_quantity} in stock</span>
+                      <Package className="h-5 w-5 text-emerald-600" />
+                      <span className="text-stone-600">{product.stock_quantity} in stock</span>
                     </div>
                   )}
                 </div>
 
                 <div className="mb-6">
-                  <h2 className="font-semibold text-gray-900 mb-2">Description</h2>
-                  <p className="text-gray-600 whitespace-pre-wrap">{product.description}</p>
+                  <h2 className="font-display font-bold text-stone-900 mb-2">Description</h2>
+                  <p className="text-stone-600 whitespace-pre-wrap leading-relaxed">{product.description}</p>
                 </div>
 
                 {product.tags && product.tags.length > 0 && (
                   <div className="mb-6">
-                    <h2 className="font-semibold text-gray-900 mb-2">Tags</h2>
+                    <h2 className="font-display font-bold text-stone-900 mb-2">Tags</h2>
                     <div className="flex flex-wrap gap-2">
                       {product.tags.map((tag, index) => (
-                        <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                        <span key={index} className="px-3 py-1 bg-stone-100 text-stone-700 rounded-full text-sm font-medium">
                           {tag}
                         </span>
                       ))}
@@ -419,18 +439,18 @@ const ProductDetail: React.FC = () => {
 
                 {/* Quantity Selector */}
                 <div className="mb-6">
-                  <h2 className="font-semibold text-gray-900 mb-2">Quantity</h2>
-                  <div className="flex items-center gap-4">
+                  <h2 className="font-display font-bold text-stone-900 mb-2">Quantity</h2>
+                  <div className="flex items-center gap-2 w-fit bg-stone-100 rounded-xl p-1">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                      className="p-2.5 rounded-lg bg-card text-stone-700 shadow-sm hover:text-clay-600 transition-colors"
                     >
                       <Minus className="h-4 w-4" />
                     </button>
-                    <span className="text-xl font-semibold w-12 text-center">{quantity}</span>
+                    <span className="text-xl font-bold w-12 text-center text-stone-900">{quantity}</span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                      className="p-2.5 rounded-lg bg-card text-stone-700 shadow-sm hover:text-clay-600 transition-colors"
                     >
                       <Plus className="h-4 w-4" />
                     </button>
@@ -441,7 +461,7 @@ const ProductDetail: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <button
                     onClick={addToCart}
-                    className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center justify-center gap-2"
+                    className="bg-clay-500 text-white px-6 py-3.5 rounded-xl hover:bg-clay-600 transition-colors font-semibold flex items-center justify-center gap-2 shadow-md shadow-clay-500/25"
                   >
                     <ShoppingCart className="h-5 w-5" />
                     Add to Cart
@@ -449,24 +469,30 @@ const ProductDetail: React.FC = () => {
                   <Link
                     to="/checkout"
                     onClick={addToCart}
-                    className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium text-center"
+                    className="bg-emerald-600 text-white px-6 py-3.5 rounded-xl hover:bg-emerald-700 transition-colors font-semibold text-center flex items-center justify-center shadow-md shadow-emerald-600/25"
                   >
                     Buy Now
                   </Link>
                 </div>
 
                 {/* Seller Info */}
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="font-semibold text-gray-900 mb-3">Seller Information</h2>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {product.seller?.full_name}
-                      </p>
+                <div className="border-t border-stone-200 pt-6">
+                  <h2 className="font-display font-bold text-stone-900 mb-3">Seller Information</h2>
+                  <div className="flex items-center justify-between gap-4 bg-stone-50/70 rounded-xl p-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-clay-500 to-marigold-400 text-white font-display font-bold text-lg">
+                        {product.seller?.full_name?.charAt(0) || 'S'}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-stone-900 truncate">
+                          {product.seller?.full_name}
+                        </p>
+                        <p className="text-xs text-stone-500">Verified seller</p>
+                      </div>
                     </div>
                     <button
                       onClick={() => setShowContactModal(true)}
-                      className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors"
+                      className="shrink-0 px-4 py-2 border border-clay-500 text-clay-600 rounded-xl font-semibold hover:bg-clay-500 hover:text-white transition-colors"
                     >
                       Contact Seller
                     </button>
@@ -478,8 +504,8 @@ const ProductDetail: React.FC = () => {
 
           {/* Reviews Section */}
           <div className="mb-12">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
+            <div className="bg-card rounded-2xl shadow-lg shadow-stone-900/5 border border-stone-200/70 p-6 sm:p-8">
+              <h2 className="font-display text-2xl font-bold text-stone-900 mb-6">Customer Reviews</h2>
               <ReviewList 
                 entityId={product.id} 
                 entityType="product" 
@@ -491,7 +517,7 @@ const ProductDetail: React.FC = () => {
                   {!showReviewForm ? (
                     <button
                       onClick={() => setShowReviewForm(true)}
-                      className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                      className="bg-clay-500 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-clay-600 transition-colors shadow-md shadow-clay-500/25"
                     >
                       Write a Review
                     </button>
@@ -515,22 +541,24 @@ const ProductDetail: React.FC = () => {
           {/* Related Products */}
           {relatedProducts.length > 0 && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
+              <h2 className="font-display text-2xl font-bold text-stone-900 mb-6">Related Products</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {relatedProducts.map((relatedProduct) => (
                   <Link
                     key={relatedProduct.id}
                     to={`/product/${relatedProduct.id}`}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                    className="group bg-card rounded-2xl shadow-sm border border-stone-200/70 overflow-hidden hover:shadow-lg hover:shadow-stone-900/10 hover:-translate-y-1 transition-all"
                   >
-                    <img
-                      src={relatedProduct.images[0] || '/placeholder.png'}
-                      alt={relatedProduct.title}
-                      className="w-full h-48 object-cover"
-                    />
+                    <div className="overflow-hidden">
+                      <img
+                        src={relatedProduct.images[0] || '/placeholder.png'}
+                        alt={relatedProduct.title}
+                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{relatedProduct.title}</h3>
-                      <p className="text-lg font-bold text-indigo-600">${relatedProduct.price.toLocaleString()}</p>
+                      <h3 className="font-semibold text-stone-900 mb-2 line-clamp-2 group-hover:text-clay-600 transition-colors">{relatedProduct.title}</h3>
+                      <p className="font-display text-lg font-bold text-clay-600">${relatedProduct.price.toLocaleString()}</p>
                     </div>
                   </Link>
                 ))}
