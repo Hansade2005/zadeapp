@@ -40,11 +40,13 @@ const MyCredits: React.FC = () => {
   const [clientSecret, setClientSecret] = useState<string>('');
   const [showPayment, setShowPayment] = useState(false);
 
+  // Prices are stored in dollars (USD), consistent with product checkout.
+  // They are converted to cents only when creating the Stripe payment intent.
   const creditPackages = [
-    { credits: 10, price: 1000, popular: false },
-    { credits: 50, price: 4500, popular: true, discount: '10% OFF' },
-    { credits: 100, price: 8000, popular: false, discount: '20% OFF' },
-    { credits: 500, price: 35000, popular: false, discount: '30% OFF' },
+    { credits: 10, price: 10, popular: false },
+    { credits: 50, price: 45, popular: true, discount: '10% OFF' },
+    { credits: 100, price: 80, popular: false, discount: '20% OFF' },
+    { credits: 500, price: 350, popular: false, discount: '30% OFF' },
   ];
 
   useEffect(() => {
@@ -106,6 +108,9 @@ const MyCredits: React.FC = () => {
 
     setPurchasing(true);
     try {
+      // Stripe expects the amount in cents (smallest currency unit).
+      const totalInCents = Math.round(price * 100);
+
       // Create payment intent via edge function
       const { data, error } = await supabase.functions.invoke('create-payment-intent', {
         body: {
@@ -117,7 +122,7 @@ const MyCredits: React.FC = () => {
             productId: `credits-${credits}`,
             credits: credits // Include credits in the item
           }],
-          total: price,
+          total: totalInCents,
           type: 'credit_purchase',
           credits: credits
         },
@@ -163,7 +168,7 @@ const MyCredits: React.FC = () => {
           user_id: user.id,
           amount: credits,
           transaction_type: 'purchase',
-          description: `Purchased ${credits} credits for $${(price / 100).toLocaleString()}`,
+          description: `Purchased ${credits} credits for $${price.toLocaleString()}`,
         });
 
       if (txError) throw txError;
@@ -270,10 +275,10 @@ const MyCredits: React.FC = () => {
                     <div className="text-4xl font-bold text-indigo-600 mb-2">{pkg.credits}</div>
                     <div className="text-sm text-gray-600 mb-4">Credits</div>
                     <div className="text-2xl font-bold text-gray-900 mb-4">
-                      ${(pkg.price / 100).toLocaleString()}
+                      ${pkg.price.toLocaleString()}
                     </div>
                     <div className="text-sm text-gray-500">
-                      ${((pkg.price / 100) / pkg.credits).toFixed(2)} per credit
+                      ${(pkg.price / pkg.credits).toFixed(2)} per credit
                     </div>
                   </div>
                 </div>
@@ -288,7 +293,7 @@ const MyCredits: React.FC = () => {
                       You're purchasing {creditPackages[selectedPackage].credits} credits
                     </p>
                     <p className="text-sm text-gray-600">
-                      Total: ${(creditPackages[selectedPackage].price / 100).toLocaleString()}
+                      Total: ${creditPackages[selectedPackage].price.toLocaleString()}
                     </p>
                   </div>
                   <button
