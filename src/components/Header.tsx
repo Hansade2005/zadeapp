@@ -73,16 +73,16 @@ const Header: React.FC<HeaderProps> = ({
             <span className="relative inline-flex items-center justify-center rounded-2xl bg-gradient-to-br from-clay-500/10 to-marigold-400/10 p-1.5 ring-1 ring-clay-200/50 transition-all duration-300 group-hover:ring-clay-400/60 group-hover:shadow-md group-hover:shadow-clay-500/20">
               <img
                 src="/logo.svg"
-                alt="ZadeApp Logo"
+                alt="Zaideapp Logo"
                 className="h-8 sm:h-9 w-auto transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
               />
             </span>
             <span className="hidden sm:inline-flex flex-col leading-none">
               <span className="font-display font-extrabold text-xl tracking-tight gradient-text">
-                Zade
+                Zaideapp
               </span>
               <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-                Marketplace
+                On Good Business
               </span>
             </span>
           </Link>
