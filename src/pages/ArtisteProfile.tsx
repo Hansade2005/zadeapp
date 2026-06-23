@@ -43,11 +43,18 @@ const ArtisteProfilePage: React.FC = () => {
   const [newImageUrl, setNewImageUrl] = useState('');
   const [uploading, setUploading] = useState<null | 'profile' | 'gallery' | 'video' | 'audio'>(null);
 
+  // Max upload size (50MB) — covers high-res photos and short audio/video clips.
+  const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
+
   // Uploads a file to the public freelancer-portfolios bucket and returns its public URL.
   const uploadToStorage = async (file: File, folder: string): Promise<string> => {
+    if (!user) throw new Error('You must be signed in to upload files');
+    if (file.size > MAX_UPLOAD_BYTES) {
+      throw new Error(`"${file.name}" is too large (max 50MB)`);
+    }
     const ext = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const filePath = `${user!.id}/${folder}/${fileName}`;
+    const filePath = `${user.id}/${folder}/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from('freelancer-portfolios')
@@ -66,9 +73,9 @@ const ArtisteProfilePage: React.FC = () => {
       const url = await uploadToStorage(files[0], 'profile');
       setFormData(prev => ({ ...prev, profile_image: url }));
       toast.success('Profile image uploaded');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading profile image:', error);
-      toast.error('Failed to upload image');
+      toast.error(error?.message || 'Failed to upload image');
     } finally {
       setUploading(null);
     }
@@ -82,15 +89,14 @@ const ArtisteProfilePage: React.FC = () => {
     if (!files || files.length === 0 || !user) return;
     setUploading(folder);
     try {
-      const urls: string[] = [];
-      for (const file of Array.from(files)) {
-        urls.push(await uploadToStorage(file, folder));
-      }
+      const urls = await Promise.all(
+        Array.from(files).map((file) => uploadToStorage(file, folder))
+      );
       setFormData(prev => ({ ...prev, [field]: [...(prev[field] as string[]), ...urls] }));
       toast.success(`${urls.length} file${urls.length > 1 ? 's' : ''} uploaded`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading files:', error);
-      toast.error('Failed to upload files');
+      toast.error(error?.message || 'Failed to upload files');
     } finally {
       setUploading(null);
     }
