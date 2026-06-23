@@ -41,6 +41,66 @@ const ArtisteProfilePage: React.FC = () => {
   const [newVideoUrl, setNewVideoUrl] = useState('');
   const [newAudioUrl, setNewAudioUrl] = useState('');
   const [newImageUrl, setNewImageUrl] = useState('');
+  const [uploading, setUploading] = useState<null | 'profile' | 'gallery' | 'video' | 'audio'>(null);
+
+  // Max upload size (50MB) — covers high-res photos and short audio/video clips.
+  const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
+
+  // Uploads a file to the public freelancer-portfolios bucket and returns its public URL.
+  const uploadToStorage = async (file: File, folder: string): Promise<string> => {
+    if (!user) throw new Error('You must be signed in to upload files');
+    if (file.size > MAX_UPLOAD_BYTES) {
+      throw new Error(`"${file.name}" is too large (max 50MB)`);
+    }
+    const ext = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const filePath = `${user.id}/${folder}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('freelancer-portfolios')
+      .upload(filePath, file, { cacheControl: '3600', upsert: false });
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage.from('freelancer-portfolios').getPublicUrl(filePath);
+    return data.publicUrl;
+  };
+
+  const handleProfileImageUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0 || !user) return;
+    setUploading('profile');
+    try {
+      const url = await uploadToStorage(files[0], 'profile');
+      setFormData(prev => ({ ...prev, profile_image: url }));
+      toast.success('Profile image uploaded');
+    } catch (error: any) {
+      console.error('Error uploading profile image:', error);
+      toast.error(error?.message || 'Failed to upload image');
+    } finally {
+      setUploading(null);
+    }
+  };
+
+  const handleMediaUpload = async (
+    files: FileList | null,
+    folder: 'gallery' | 'video' | 'audio',
+    field: 'gallery_images' | 'video_urls' | 'audio_urls'
+  ) => {
+    if (!files || files.length === 0 || !user) return;
+    setUploading(folder);
+    try {
+      const urls = await Promise.all(
+        Array.from(files).map((file) => uploadToStorage(file, folder))
+      );
+      setFormData(prev => ({ ...prev, [field]: [...(prev[field] as string[]), ...urls] }));
+      toast.success(`${urls.length} file${urls.length > 1 ? 's' : ''} uploaded`);
+    } catch (error: any) {
+      console.error('Error uploading files:', error);
+      toast.error(error?.message || 'Failed to upload files');
+    } finally {
+      setUploading(null);
+    }
+  };
 
   useEffect(() => {
     if (!user) {
@@ -331,16 +391,40 @@ const ArtisteProfilePage: React.FC = () => {
 
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Profile Image URL
+                  Profile Image
                 </label>
-                <input
-                  type="url"
-                  value={formData.profile_image}
-                  onChange={(e) => setFormData(prev => ({ ...prev, profile_image: e.target.value }))}
-                  disabled={!editing}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
-                  placeholder="https://example.com/profile.jpg"
-                />
+                <div className="flex items-center gap-4">
+                  {formData.profile_image && (
+                    <img
+                      src={formData.profile_image}
+                      alt="Profile"
+                      className="w-16 h-16 rounded-full object-cover border border-gray-200"
+                    />
+                  )}
+                  <div className="flex-1 space-y-2">
+                    <input
+                      type="url"
+                      value={formData.profile_image}
+                      onChange={(e) => setFormData(prev => ({ ...prev, profile_image: e.target.value }))}
+                      disabled={!editing}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
+                      placeholder="Paste an image URL or upload below"
+                    />
+                    {editing && (
+                      <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer ${uploading === 'profile' ? 'bg-gray-200 text-gray-500' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
+                        <Upload className="w-4 h-4" />
+                        {uploading === 'profile' ? 'Uploading...' : 'Upload Image'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          disabled={uploading === 'profile'}
+                          onChange={(e) => handleProfileImageUpload(e.target.files)}
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -449,6 +533,18 @@ const ArtisteProfilePage: React.FC = () => {
                     >
                       <Plus className="w-5 h-5" />
                     </button>
+                    <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer whitespace-nowrap ${uploading === 'video' ? 'bg-gray-200 text-gray-500' : 'bg-gray-800 text-white hover:bg-gray-900'}`}>
+                      <Upload className="w-4 h-4" />
+                      {uploading === 'video' ? 'Uploading...' : 'Upload'}
+                      <input
+                        type="file"
+                        accept="video/*"
+                        multiple
+                        className="hidden"
+                        disabled={uploading === 'video'}
+                        onChange={(e) => handleMediaUpload(e.target.files, 'video', 'video_urls')}
+                      />
+                    </label>
                   </div>
                 )}
                 <div className="space-y-2">
@@ -492,6 +588,18 @@ const ArtisteProfilePage: React.FC = () => {
                     >
                       <Plus className="w-5 h-5" />
                     </button>
+                    <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer whitespace-nowrap ${uploading === 'audio' ? 'bg-gray-200 text-gray-500' : 'bg-gray-800 text-white hover:bg-gray-900'}`}>
+                      <Upload className="w-4 h-4" />
+                      {uploading === 'audio' ? 'Uploading...' : 'Upload'}
+                      <input
+                        type="file"
+                        accept="audio/*"
+                        multiple
+                        className="hidden"
+                        disabled={uploading === 'audio'}
+                        onChange={(e) => handleMediaUpload(e.target.files, 'audio', 'audio_urls')}
+                      />
+                    </label>
                   </div>
                 )}
                 <div className="space-y-2">
@@ -535,6 +643,18 @@ const ArtisteProfilePage: React.FC = () => {
                     >
                       <Plus className="w-5 h-5" />
                     </button>
+                    <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer whitespace-nowrap ${uploading === 'gallery' ? 'bg-gray-200 text-gray-500' : 'bg-gray-800 text-white hover:bg-gray-900'}`}>
+                      <Upload className="w-4 h-4" />
+                      {uploading === 'gallery' ? 'Uploading...' : 'Upload'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        disabled={uploading === 'gallery'}
+                        onChange={(e) => handleMediaUpload(e.target.files, 'gallery', 'gallery_images')}
+                      />
+                    </label>
                   </div>
                 )}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

@@ -64,15 +64,12 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-2">
-            <Link to="/" className="group flex items-center gap-2.5 mb-4">
+            <Link to="/" className="group flex items-center mb-4">
               <img
-                src="/logo.svg"
-                alt="ZadeApp Logo"
-                className="h-8 w-auto transition-transform duration-300 group-hover:scale-105"
+                src="/logo.png"
+                alt="Zaideapp — On Good Business"
+                className="h-14 w-auto object-contain bg-white rounded-xl p-1 transition-transform duration-300 group-hover:scale-105"
               />
-              <span className="font-display font-extrabold text-2xl tracking-tight gradient-text leading-none">
-                Zade
-              </span>
             </Link>
             <p className="text-stone-400 mb-6 max-w-md text-sm leading-relaxed">
               {t.footer.description}
