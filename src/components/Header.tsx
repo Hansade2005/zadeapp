@@ -69,21 +69,13 @@ const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 min-w-0">
           {/* Logo */}
-          <Link to="/" className="group flex items-center flex-shrink-0 gap-2.5">
-            <span className="relative inline-flex items-center justify-center rounded-2xl bg-gradient-to-br from-clay-500/10 to-marigold-400/10 p-1.5 ring-1 ring-clay-200/50 transition-all duration-300 group-hover:ring-clay-400/60 group-hover:shadow-md group-hover:shadow-clay-500/20">
+          <Link to="/" className="group flex items-center flex-shrink-0">
+            <span className="relative inline-flex items-center justify-center rounded-2xl bg-white p-1 ring-1 ring-clay-200/60 transition-all duration-300 group-hover:ring-clay-400/70 group-hover:shadow-md group-hover:shadow-clay-500/20">
               <img
-                src="/logo.svg"
-                alt="Zaideapp Logo"
-                className="h-8 sm:h-9 w-auto transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                src="/logo.png"
+                alt="Zaideapp — On Good Business"
+                className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
-            </span>
-            <span className="hidden sm:inline-flex flex-col leading-none">
-              <span className="font-display font-extrabold text-xl tracking-tight gradient-text">
-                Zaideapp
-              </span>
-              <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-400">
-                On Good Business
-              </span>
             </span>
           </Link>
 
