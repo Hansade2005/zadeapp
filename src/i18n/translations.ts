@@ -454,7 +454,7 @@ export const translations: Record<Language, Translations> = {
       inCanada: 'in Canada',
       contactUs: 'Contact Us',
       supportEmail: 'support@zadeapp.ca',
-      supportPhone: '+1 (800) ZADE-APP',
+      supportPhone: '+1 (437) 907-0414',
     },
     messages: {
       title: 'Messages',
@@ -677,7 +677,7 @@ export const translations: Record<Language, Translations> = {
       inCanada: 'au Canada',
       contactUs: 'Contactez-nous',
       supportEmail: 'support@zadeapp.ca',
-      supportPhone: '+1 (800) ZADE-APP',
+      supportPhone: '+1 (437) 907-0414',
     },
     messages: {
       title: 'Messages',
