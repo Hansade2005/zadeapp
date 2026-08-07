@@ -48,10 +48,10 @@ const Footer: React.FC = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: 'https://facebook.com/zadeapp', label: 'Facebook' },
-    { icon: Twitter, href: 'https://twitter.com/zadeapp', label: 'Twitter' },
-    { icon: Instagram, href: 'https://instagram.com/zadeapp', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://linkedin.com/company/zadeapp', label: 'LinkedIn' }
+    { icon: Facebook, href: 'https://www.facebook.com/share/1GudXC1APd', label: 'Facebook' },
+    { icon: Twitter, href: 'https://x.com/ZaideApp', label: 'Twitter' },
+    { icon: Instagram, href: 'https://www.instagram.com/zaideapp?igsh=ZTkzcHZ4cjJxOGs0&utm_source=ig_contact_invite', label: 'Instagram' },
+    { icon: Linkedin, href: 'https://ca.linkedin.com/in/zaide-app-67b68213a', label: 'LinkedIn' }
   ];
 
   return (
