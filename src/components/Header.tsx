@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({
           <Link to="/" className="group flex items-center flex-shrink-0">
             <span className="relative inline-flex items-center justify-center rounded-2xl bg-white p-1 ring-1 ring-clay-200/60 transition-all duration-300 group-hover:ring-clay-400/70 group-hover:shadow-md group-hover:shadow-clay-500/20">
               <img
-                src="/logo.jpeg"
+                src="/favicon.jpg"
                 alt="Zaideapp — On Good Business"
                 className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
