@@ -66,7 +66,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <Link to="/" className="group flex items-center mb-4">
               <img
-                src="/logo.jpeg"
+                src="/favicon.jpg"
                 alt="Zaideapp — On Good Business"
                 className="h-14 w-auto object-contain bg-white rounded-xl p-1 transition-transform duration-300 group-hover:scale-105"
               />
