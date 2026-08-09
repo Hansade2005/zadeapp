@@ -68,17 +68,18 @@ export const BoostManager: React.FC<BoostManagerProps> = ({
   const fetchUserCredits = async () => {
     if (!user) return;
 
+    // Credits are stored on users.credits (same store the purchase flow writes to)
     const { data, error } = await supabase
-      .from('credits')
-      .select('balance')
-      .eq('user_id', user.id)
+      .from('users')
+      .select('credits')
+      .eq('id', user.id)
       .single();
 
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching credits:', error);
     }
 
-    setUserCredits(data?.balance || 0);
+    setUserCredits(data?.credits || 0);
     setLoadingCredits(false);
   };
 
@@ -119,14 +120,14 @@ export const BoostManager: React.FC<BoostManagerProps> = ({
 
       // Start a transaction: deduct credits, create boost, update entity
       const { data: creditData, error: creditError } = await supabase
-        .from('credits')
-        .select('balance')
-        .eq('user_id', user.id)
+        .from('users')
+        .select('credits')
+        .eq('id', user.id)
         .single();
 
       if (creditError) throw creditError;
 
-      const newBalance = (creditData?.balance || 0) - selectedPlan.credits_cost;
+      const newBalance = (creditData?.credits || 0) - selectedPlan.credits_cost;
 
       if (newBalance < 0) {
         throw new Error('Insufficient credits');
@@ -134,9 +135,9 @@ export const BoostManager: React.FC<BoostManagerProps> = ({
 
       // Update credit balance
       const { error: updateCreditError } = await supabase
-        .from('credits')
-        .update({ balance: newBalance, updated_at: new Date().toISOString() })
-        .eq('user_id', user.id);
+        .from('users')
+        .update({ credits: newBalance })
+        .eq('id', user.id);
 
       if (updateCreditError) throw updateCreditError;
 
