@@ -251,7 +251,7 @@ const Home: React.FC = () => {
                   style={{ animationDelay: '0ms' }}
                 >
                   <Sparkles className="w-4 h-4" />
-                  Africa&apos;s boldest marketplace
+                  Zaideapp — on good business
                 </span>
                 <h1
                   className="animate-slide-up font-display text-5xl md:text-7xl font-extrabold leading-[0.95] tracking-tight mb-6"
@@ -293,9 +293,18 @@ const Home: React.FC = () => {
               >
                 <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-tr from-clay-500/40 to-marigold-400/40 blur-2xl"></div>
                 <img
-                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600"
-                  alt="Canadian marketplace"
-                  className="relative rounded-[2rem] shadow-2xl ring-1 ring-white/10 rotate-2 hover:rotate-0 transition-transform duration-500"
+                  src="/flyer.jpg"
+                  onError={(e) => {
+                    // Serve the flyer from Supabase storage until public/flyer.jpg exists in the repo
+                    const img = e.target as HTMLImageElement;
+                    if (!img.dataset.fallback) {
+                      img.dataset.fallback = '1';
+                      img.src =
+                        'https://bqawulpyjgzngltaqoxc.supabase.co/storage/v1/object/public/freelancer-portfolios/7b32be63-e347-45cf-b7c8-6880728fe569/branding/flyer.jpg';
+                    }
+                  }}
+                  alt="Zaideapp — buy, sell, get business info"
+                  className="relative rounded-[2rem] shadow-2xl ring-1 ring-white/10 rotate-2 hover:rotate-0 transition-transform duration-500 bg-white"
                 />
                 <div className="absolute -bottom-6 -left-6 bg-background text-stone-900 rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3 rotate-[-3deg]">
                   <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
@@ -303,7 +312,7 @@ const Home: React.FC = () => {
                   </div>
                   <div>
                     <div className="font-display font-bold leading-none">Trusted vendors</div>
-                    <div className="text-xs text-stone-500">across the continent</div>
+                    <div className="text-xs text-stone-500">around the world</div>
                   </div>
                 </div>
               </div>
