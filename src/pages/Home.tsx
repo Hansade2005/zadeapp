@@ -295,9 +295,13 @@ const Home: React.FC = () => {
                 <img
                   src="/flyer.jpg"
                   onError={(e) => {
-                    // Fall back to a stock photo until public/flyer.jpg is uploaded
-                    (e.target as HTMLImageElement).src =
-                      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600';
+                    // Serve the flyer from Supabase storage until public/flyer.jpg exists in the repo
+                    const img = e.target as HTMLImageElement;
+                    if (!img.dataset.fallback) {
+                      img.dataset.fallback = '1';
+                      img.src =
+                        'https://bqawulpyjgzngltaqoxc.supabase.co/storage/v1/object/public/freelancer-portfolios/7b32be63-e347-45cf-b7c8-6880728fe569/branding/flyer.jpg';
+                    }
                   }}
                   alt="Zaideapp — buy, sell, get business info"
                   className="relative rounded-[2rem] shadow-2xl ring-1 ring-white/10 rotate-2 hover:rotate-0 transition-transform duration-500 bg-white"
