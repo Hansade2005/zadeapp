@@ -23,9 +23,9 @@ interface CreditTransaction {
 interface BoostPurchase {
   id: string;
   entity_type: string;
-  boost_duration: number;
+  boost_duration_days: number;
   credits_spent: number;
-  expires_at: string;
+  boost_end_date: string;
   created_at: string;
 }
 
@@ -87,7 +87,7 @@ const MyCredits: React.FC = () => {
         .from('boost_purchases')
         .select('*')
         .eq('user_id', user.id)
-        .gte('expires_at', new Date().toISOString())
+        .gte('boost_end_date', new Date().toISOString())
         .order('created_at', { ascending: false });
 
       if (boostError) throw boostError;
@@ -152,22 +152,24 @@ const MyCredits: React.FC = () => {
         .single();
 
       const currentCredits = userData?.credits || 0;
+      const newBalance = currentCredits + credits;
 
       // Update credits
       const { error: updateError } = await supabase
         .from('users')
-        .update({ credits: currentCredits + credits })
+        .update({ credits: newBalance })
         .eq('id', user.id);
 
       if (updateError) throw updateError;
 
-      // Record transaction
+      // Record transaction (balance_after is required by the table)
       const { error: txError } = await supabase
         .from('credit_transactions')
         .insert({
           user_id: user.id,
           amount: credits,
           transaction_type: 'purchase',
+          balance_after: newBalance,
           description: `Purchased ${credits} credits for $${price.toLocaleString()}`,
         });
 
@@ -344,14 +346,14 @@ const MyCredits: React.FC = () => {
                       <div>
                         <p className="font-medium text-gray-900 capitalize">{boost.entity_type} Boost</p>
                         <p className="text-sm text-gray-600">
-                          {boost.boost_duration} days • {boost.credits_spent} credits
+                          {boost.boost_duration_days} days • {boost.credits_spent} credits
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-gray-600">Expires</p>
                       <p className="font-medium text-gray-900">
-                        {new Date(boost.expires_at).toLocaleDateString()}
+                        {new Date(boost.boost_end_date).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
